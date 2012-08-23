@@ -1,0 +1,110 @@
+package de.hliebau.tracktivity.domain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
+
+import com.vividsolutions.jts.geom.MultiLineString;
+
+import de.hliebau.tracktivity.util.GeometryUtils;
+
+@Entity
+public class Track extends AbstractEntity {
+
+	private String description;
+
+	private MultiLineString lines;
+
+	private String name;
+
+	private List<TrackSegment> segments = new ArrayList<TrackSegment>();
+
+	public Track() {
+		super();
+	}
+
+	public Track(List<TrackSegment> segments) {
+		this();
+		this.setSegments(segments);
+	}
+
+	public Track(TrackSegment segment) {
+		this();
+		this.addSegment(segment);
+	}
+
+	public void addSegment(TrackSegment segment) {
+		segments.add(segment);
+	}
+
+	@PostLoad
+	@PrePersist
+	public void generateLines() {
+		for (TrackSegment segment : segments) {
+			segment.generateLine();
+		}
+		lines = GeometryUtils.getInstance().createMultiLineString(segments);
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	@Transient
+	public Duration getDuration(boolean includePauses) {
+		if (includePauses) {
+			long start = segments.get(0).getStartingPoint().getUtcTime().getTime();
+			long end = segments.get(segments.size() - 1).getDestination().getUtcTime().getTime();
+			return new Duration(end - start);
+		}
+		Duration d = new Duration();
+		for (TrackSegment segment : segments) {
+			d.add(segment.getDuration());
+		}
+		return d;
+	}
+
+	@Transient
+	public Double getLengthInMeters() {
+		return GeometryUtils.getInstance().getTotalDistance(this);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Transient
+	public int getPointsCount() {
+		int count = 0;
+		for (TrackSegment segment : segments) {
+			count += segment.getPoints().size();
+		}
+		return count;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "track_id", insertable = true, nullable = false)
+	public List<TrackSegment> getSegments() {
+		return segments;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSegments(List<TrackSegment> segments) {
+		this.segments = segments;
+	}
+
+}

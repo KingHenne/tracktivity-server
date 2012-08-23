@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/tracktivity" />
+		<property name="username" value="hendrik" />
+		<property name="password" value="" />
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="10" />
+	</bean>
+
+	<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="POSTGRESQL" />
+				<property name="showSql" value="false" />
+				<property name="generateDdl" value="true" />
+				<property name="databasePlatform" value="org.hibernatespatial.postgis.PostgisDialect" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- To enable EntityManager injection in Spring, we'll need to configure this bean: -->
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	
+	<!-- Add exception translation to JPA DAOs: -->
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf" />
+	</bean>
+	
+	<bean id="geometryFactory" class="com.vividsolutions.jts.geom.GeometryFactory">
+		<constructor-arg name="precisionModel">
+			<bean class="com.vividsolutions.jts.geom.PrecisionModel" />
+		</constructor-arg>
+		<constructor-arg name="SRID" value="4326" />
+	</bean>
+	
+	<!-- Allow annotation based transaction declarations. -->
+	<tx:annotation-driven />
+	
+	<!-- Automatically proxy beans whose methods match the pointcuts defined with @Pointcut annotations in @Aspect-annotated beans. -->
+	<aop:aspectj-autoproxy />
+	
+	<bean id="debugHelper" class="de.hliebau.tracktivity.util.DebugHelper" />
+
+	<!-- Scan the the persistence package for Spring repositories -->
+	<context:component-scan base-package="de.hliebau.tracktivity.persistence">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+	</context:component-scan>
+
+	<!-- Scan the the service package for Spring services -->
+	<context:component-scan base-package="de.hliebau.tracktivity.service">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+
+	<!-- Scan the the util package for Spring services -->
+	<context:component-scan base-package="de.hliebau.tracktivity.util">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+
+</beans>

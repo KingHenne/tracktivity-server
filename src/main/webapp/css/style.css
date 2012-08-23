@@ -1,0 +1,9 @@
+body {
+	margin: 20px 40px;
+}
+
+form .error {
+	display: block;
+	color: #d20;
+	font-size: 0.77em;
+}
