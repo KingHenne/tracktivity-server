@@ -57,16 +57,15 @@ public class TrackServiceTest {
 	@Rollback(false)
 	public void testImportGpx() {
 		File gpxFile = new File("src/test/resources/track.gpx");
-		for (int i = 0; i < 30; i++) {
-			long countBefore = trackService.getTrackCount();
-			Track track = trackService.importGpx(gpxFile);
-			Assert.assertNotNull(track);
-			Assert.assertEquals(1181, track.getPointsCount());
-			Assert.assertEquals(35541.0, Math.floor(track.getLengthInMeters()));
-			Assert.assertEquals(1, track.getDuration(false).getHours());
-			Assert.assertEquals("Bergtour 2", track.getName());
-			Assert.assertEquals("The track count has not been increased by 1.", countBefore + 1,
-					trackService.getTrackCount());
-		}
+		long countBefore = trackService.getTrackCount();
+		Track track = trackService.importGpx(gpxFile);
+		Assert.assertNotNull(track);
+		Assert.assertEquals(1181, track.getPointsCount());
+		Assert.assertEquals(35541.0, Math.floor(track.getLengthInMeters()));
+		Assert.assertEquals(1, track.getDuration(false).getHours());
+		Assert.assertEquals("Bergtour 2", track.getName());
+		Assert.assertEquals("The track count has not been increased by 1.", countBefore + 1,
+				trackService.getTrackCount());
 	}
+
 }
