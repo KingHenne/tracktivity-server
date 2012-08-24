@@ -1,4 +1,4 @@
-package de.hliebau.tracktivity.web;
+package de.hliebau.tracktivity.presentation;
 
 import java.util.Map;
 
