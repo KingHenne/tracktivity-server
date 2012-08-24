@@ -67,7 +67,7 @@ public class GeometryUtils {
 		geocalc.setStartingGeographicPoint(p1.getPoint().getX(), p1.getPoint().getY());
 		geocalc.setDestinationGeographicPoint(p2.getPoint().getX(), p2.getPoint().getY());
 		double d = geocalc.getOrthodromicDistance();
-		logger.debug(String.format("%.3f", d));
+		// logger.debug(String.format("%.3f", d));
 		return d;
 	}
 
