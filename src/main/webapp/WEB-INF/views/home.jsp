@@ -7,16 +7,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Hello World!</title>
+<title>Tracktivity - Recent Tracks</title>
 <link rel="stylesheet" href="/css/normalize.css" type="text/css" />
 <link rel="stylesheet" href="/css/style.css" type="text/css" />
 </head>
 <body>
 
-<h1>${headline}</h1>
+<h1>Tracks</h1>
+
+<p><em>fetched in ${fetchTime} ms</em></p>
 
 <c:forEach var="track" items="${tracks}">
-	${track.name} (${track.pointsCount} Punkte; <fmt:formatNumber value="${track.lengthInMeters / 1000}" maxFractionDigits="2" /> km)<br/>
+	${track.name} (${track.pointsCount} Punkte;	<fmt:formatNumber value="${track.lengthInMeters / 1000}" maxFractionDigits="2" /> km)<br/>
 </c:forEach>
 
 </body>
