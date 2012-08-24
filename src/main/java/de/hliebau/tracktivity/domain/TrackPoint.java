@@ -33,6 +33,12 @@ public class TrackPoint extends AbstractEntity {
 		this.point = GeometryUtils.getInstance().createPoint(lon, lat, ele);
 	}
 
+	public TrackPoint(Point point, Date utcTime) {
+		this();
+		this.point = point;
+		this.utcTime = utcTime;
+	}
+
 	@Type(type = "org.hibernatespatial.GeometryUserType")
 	public Point getPoint() {
 		return point;
