@@ -12,7 +12,7 @@
 	<mvc:annotation-driven />
 	
 	<!-- Scan the the web package for Spring MVC controller -->
-	<context:component-scan base-package="de.hliebau.tracktivity.web">
+	<context:component-scan base-package="de.hliebau.tracktivity.presentation">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
