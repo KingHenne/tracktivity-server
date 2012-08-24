@@ -9,11 +9,10 @@
 	<description>Hendrik's GPS Tracking Web Servive</description>
 
 	<repositories>
-        <repository>
-            <id>osgeo</id>
-            <name>Open Source Geospatial Foundation Repository</name>
-            <url>http://download.osgeo.org/webdav/geotools/</url>
-        </repository>
+		<repository>
+			<id>OSGEO GeoTools repo</id>
+			<url>http://download.osgeo.org/webdav/geotools</url>
+		</repository>
 		<repository>
 			<id>Hibernate Spatial repo</id>
 			<url>http://www.hibernatespatial.org/repository</url>
@@ -43,18 +42,13 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.6.10.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>1.2.0.Final</version>
+			<version>4.1.2</version>
 		</dependency>
 		<!-- Hibernate Spatial for postgis. This will include Hibernate Spatial Core and JTS -->
 		<dependency>
-			<groupId>org.hibernatespatial</groupId>
-			<artifactId>hibernate-spatial-postgis</artifactId>
-			<version>1.1.1</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-spatial</artifactId>
+			<version>4.0-M1</version>
 		</dependency>
 		<!-- the Postgis JDBC driver -->
 		<dependency>

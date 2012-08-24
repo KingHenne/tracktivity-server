@@ -54,7 +54,7 @@ public class TrackServiceTest {
 	}
 
 	@Test
-	@Rollback(false)
+	@Rollback(true)
 	public void testImportGpx() {
 		File gpxFile = new File("src/test/resources/track.gpx");
 		long countBefore = trackService.getTrackCount();
