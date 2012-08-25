@@ -68,4 +68,17 @@ public class TrackServiceTest {
 				trackService.getTrackCount());
 	}
 
+	@Test
+	public void testLengthCalculationPerformance() {
+		Track track = trackService.getRecentTracks(1).get(0);
+		Assert.assertNotNull(track);
+
+		long start = System.currentTimeMillis();
+		double length = track.getLengthInMeters();
+		long end = System.currentTimeMillis();
+		long millis = end - start;
+		Assert.assertTrue("length was 0", length > 0);
+		Assert.assertTrue(String.format("calculation took way too long: %d ms", millis), millis < 50);
+	}
+
 }
