@@ -15,6 +15,6 @@ public interface TrackService {
 
 	public Track importGpx(File gpxFile);
 
-	public Track retrieveTrack(long id);
+	public Track retrieveTrack(Long id);
 
 }

@@ -20,21 +20,25 @@ public class TrackServiceImpl implements TrackService {
 	@Autowired
 	private TrackDao trackDao;
 
+	@Override
 	@Transactional
 	public void createTrack(Track track) {
 		trackDao.save(track);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<Track> getRecentTracks(int count) {
 		return trackDao.getRecentTracks(count);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public long getTrackCount() {
 		return trackDao.getCount();
 	}
 
+	@Override
 	@Transactional
 	public Track importGpx(File gpxFile) {
 		Track track = gpxParser.createTrack(gpxFile);
@@ -44,8 +48,9 @@ public class TrackServiceImpl implements TrackService {
 		return track;
 	}
 
+	@Override
 	@Transactional(readOnly = true)
-	public Track retrieveTrack(long id) {
+	public Track retrieveTrack(Long id) {
 		return trackDao.findById(id);
 	}
 
