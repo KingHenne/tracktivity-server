@@ -134,6 +134,29 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
 			</plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>2.0.6</version>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<processors>
+								<processor>org.apache.openjpa.persistence.meta.AnnotationProcessor6</processor>
+							</processors>
+							<options>
+								<openjpa.metamodel>TRUE</openjpa.metamodel>
+							</options>
+							<outputDirectory>target/metamodel</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
