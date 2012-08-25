@@ -9,6 +9,8 @@ import de.hliebau.tracktivity.domain.User;
 
 public interface ActivityService {
 
+	public void createActivity(Activity activity);
+
 	public void createTrack(Track track);
 
 	public long getActivityCount();
@@ -24,5 +26,7 @@ public interface ActivityService {
 	public Activity importGpxForUser(File gpxFile, User user);
 
 	public Activity retrieveActivity(Long id);
+
+	public Activity retrieveActivityWithTrack(Long id);
 
 }

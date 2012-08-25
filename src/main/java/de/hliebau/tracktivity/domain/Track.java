@@ -11,6 +11,7 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiLineString;
 
 import de.hliebau.tracktivity.util.GeometryUtils;
@@ -64,6 +65,12 @@ public class Track extends AbstractEntity {
 	}
 
 	@Transient
+	public String getLatLngBounds() {
+		Coordinate[] convexHull = lines.convexHull().getCoordinates();
+		return GeometryUtils.toLatLngArrayString(convexHull);
+	}
+
+	@Transient
 	public Double getLengthInMeters() {
 		return GeometryUtils.getInstance().getTotalDistance(this);
 	}
@@ -81,6 +88,17 @@ public class Track extends AbstractEntity {
 	@JoinColumn(name = "track_id", insertable = true, nullable = false)
 	public List<TrackSegment> getSegments() {
 		return segments;
+	}
+
+	@Transient
+	public String getSparseMultiPolyline() {
+		StringBuilder sb = new StringBuilder("[");
+		for (TrackSegment s : segments) {
+			sb.append(s.getSparsePolyline()).append(",\n");
+		}
+		sb.deleteCharAt(sb.length() - 1); // remove line break
+		sb.deleteCharAt(sb.length() - 1); // remove last comma
+		return sb.append(']').toString();
 	}
 
 	public void setSegments(List<TrackSegment> segments) {

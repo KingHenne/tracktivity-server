@@ -6,8 +6,6 @@ import javax.annotation.PostConstruct;
 
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +30,39 @@ public class GeometryUtils {
 		return INSTANCE;
 	}
 
+	public static String toLatLngArrayString(Coordinate[] coords) {
+		if (coords.length == 1) {
+			return toLatLngString(coords[0]);
+		}
+		StringBuilder sb = new StringBuilder(coords.length * 21);
+		sb.append('[');
+		for (int i = 0; i < coords.length; i++) {
+			sb.append(toLatLngString(coords[i])).append(',');
+		}
+		sb.deleteCharAt(sb.length() - 1); // remove last comma
+		return sb.append(']').toString();
+	}
+
+	public static String toLatLngString(Coordinate coord) {
+		double lat = coord.y;
+		double lng = coord.x;
+		return toLatLngString(lat, lng);
+	}
+
+	public static String toLatLngString(double lat, double lng) {
+		StringBuilder sb = new StringBuilder(21);
+		sb.append('[').append(lat).append(',').append(lng).append(']');
+		return sb.toString();
+	}
+
+	public static String toLatLngString(TrackPoint point) {
+		return toLatLngString(point.getLatitude(), point.getLongitude());
+	}
+
 	private GeodeticCalculator geocalc;
 
 	@Autowired
 	private GeometryFactory geometryFactory;
-
-	private Logger logger;
 
 	public LineString createLineString(List<TrackPoint> points) {
 		Coordinate[] coordinates = new Coordinate[points.size()];
@@ -64,11 +89,9 @@ public class GeometryUtils {
 	}
 
 	public double getDistance(TrackPoint p1, TrackPoint p2) {
-		geocalc.setStartingGeographicPoint(p1.getPoint().getX(), p1.getPoint().getY());
-		geocalc.setDestinationGeographicPoint(p2.getPoint().getX(), p2.getPoint().getY());
-		double d = geocalc.getOrthodromicDistance();
-		// logger.debug(String.format("%.3f", d));
-		return d;
+		geocalc.setStartingGeographicPoint(p1.getLongitude(), p1.getLatitude());
+		geocalc.setDestinationGeographicPoint(p2.getLongitude(), p2.getLatitude());
+		return geocalc.getOrthodromicDistance();
 	}
 
 	public double getTotalDistance(Track track) {
@@ -92,6 +115,6 @@ public class GeometryUtils {
 	public void initialize() {
 		INSTANCE = this;
 		geocalc = new GeodeticCalculator(DefaultGeographicCRS.WGS84);
-		logger = LoggerFactory.getLogger(this.getClass().getCanonicalName());
 	}
+
 }

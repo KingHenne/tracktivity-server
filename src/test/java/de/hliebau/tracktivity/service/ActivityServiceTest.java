@@ -63,14 +63,16 @@ public class ActivityServiceTest {
 
 	@Test
 	public void testAddNewTrack() {
-		List<TrackPoint> points = new ArrayList<TrackPoint>(2);
+		List<TrackPoint> points = new ArrayList<TrackPoint>(3);
 		points.add(new TrackPoint(10.0, 20.0, 0.0));
 		points.add(new TrackPoint(15.0, 25.0, 50.0));
+		points.add(new TrackPoint(12.0, 22.0, 45.0));
 		TrackSegment segment = new TrackSegment(points);
 		Track track = new Track(segment);
 
 		long countBefore = activityService.getTrackCount();
 		activityService.createTrack(track);
+		track.getLatLngBounds();
 		// track = trackService.retrieveTrack(track.getId());
 		// ^ why do I need to do this?
 		Assert.assertNotNull(track.getLengthInMeters());

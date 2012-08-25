@@ -1,9 +1,34 @@
 body {
-	margin: 20px 40px;
+	margin: 10px;
 }
 
 form .error {
 	display: block;
 	color: #d20;
 	font-size: 0.77em;
+}
+
+#map {
+	height: 250px;
+}
+
+/* =============================================================================
+   PLACEHOLDER Media Queries for Responsive Design.
+   These override the primary ('mobile first') styles
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 480px) {
+	/* Style adjustments for viewports 480px and over go here */
+	
+}
+
+@media only screen and (min-width: 768px) {
+	/* Style adjustments for viewports 768px and over go here */
+	body {
+		margin: 20px 40px;
+	}
+	#map {
+		height: 400px;
+	}
 }

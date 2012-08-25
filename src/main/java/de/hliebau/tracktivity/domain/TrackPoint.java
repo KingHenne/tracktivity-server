@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -31,6 +32,16 @@ public class TrackPoint extends AbstractEntity {
 	public TrackPoint(double lon, double lat, double ele) {
 		this();
 		this.point = GeometryUtils.getInstance().createPoint(lon, lat, ele);
+	}
+
+	@Transient
+	public double getLatitude() {
+		return point.getY();
+	}
+
+	@Transient
+	public double getLongitude() {
+		return point.getX();
 	}
 
 	@Type(type = "org.hibernate.spatial.GeometryType")

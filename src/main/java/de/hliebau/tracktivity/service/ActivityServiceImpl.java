@@ -28,6 +28,12 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Override
 	@Transactional
+	public void createActivity(Activity activity) {
+		activityDao.save(activity);
+	}
+
+	@Override
+	@Transactional
 	public void createTrack(Track track) {
 		trackDao.save(track);
 	}
@@ -76,6 +82,16 @@ public class ActivityServiceImpl implements ActivityService {
 	@Transactional(readOnly = true)
 	public Activity retrieveActivity(Long id) {
 		return activityDao.findById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Activity retrieveActivityWithTrack(Long id) {
+		Activity activity = activityDao.findById(id);
+		if (activity != null) {
+			activity.setTrack(trackDao.findById(activity.getTrack().getId()));
+		}
+		return activity;
 	}
 
 }
