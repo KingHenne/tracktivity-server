@@ -10,7 +10,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import de.hliebau.tracktivity.domain.Track;
+import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.TrackPoint;
 import de.hliebau.tracktivity.domain.TrackSegment;
 
@@ -29,20 +29,20 @@ public class GpxHandler extends DefaultHandler {
 		}
 	}
 
+	private final Activity activity;
+
 	private TrackPoint currentPoint;
 
 	private TrackSegment currentSegment;
-
-	private final Track gpxTrack;
 
 	private final Logger logger;
 
 	private final StringBuffer sb = new StringBuffer(128);
 
-	public GpxHandler(Track track) {
+	public GpxHandler(Activity activity) {
 		super();
 		logger = LoggerFactory.getLogger(this.getClass().getCanonicalName());
-		this.gpxTrack = track;
+		this.activity = activity;
 	}
 
 	@Override
@@ -61,14 +61,14 @@ public class GpxHandler extends DefaultHandler {
 				break;
 			case NAME:
 				logger.debug("Importing new track with name: " + s);
-				gpxTrack.setName(s);
+				activity.setName(s);
 				break;
 			case DESC:
-				gpxTrack.setDescription(s);
+				activity.setDescription(s);
 				break;
 			case TRKSEG:
 				// currentSegment.generateLine();
-				gpxTrack.addSegment(currentSegment);
+				activity.getTrack().addSegment(currentSegment);
 				break;
 			case TRKPT:
 				currentSegment.addPoint(currentPoint);
@@ -91,10 +91,6 @@ public class GpxHandler extends DefaultHandler {
 				break;
 			}
 		}
-	}
-
-	public Track getGpxTrack() {
-		return gpxTrack;
 	}
 
 	@Override

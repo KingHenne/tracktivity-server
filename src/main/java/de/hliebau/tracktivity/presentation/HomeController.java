@@ -7,22 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import de.hliebau.tracktivity.domain.Track;
-import de.hliebau.tracktivity.service.TrackService;
+import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.service.ActivityService;
 
 @Controller
 public class HomeController {
 
 	@Autowired
-	private TrackService trackService;
+	private ActivityService activityService;
 
 	@RequestMapping({ "/" })
 	public String showHomePage(Map<String, Object> model) {
 		long start = System.currentTimeMillis();
-		List<Track> tracks = trackService.getRecentTracks(50);
+		List<Activity> activities = activityService.getRecentActivities(50);
 		long end = System.currentTimeMillis();
 		model.put("fetchTime", end - start);
-		model.put("tracks", tracks);
+		model.put("activities", activities);
 		return "home";
 	}
 

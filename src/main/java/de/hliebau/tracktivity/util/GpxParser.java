@@ -10,6 +10,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.Track;
 
 @Service
@@ -28,13 +29,13 @@ public class GpxParser {
 		}
 	}
 
-	public Track createTrack(File gpxFile) {
+	public Activity createActivity(File gpxFile) {
 		if (saxParser == null) {
 			return null;
 		}
-		Track gpxTrack = new Track();
+		Activity activity = new Activity(new Track());
 		try {
-			saxParser.parse(gpxFile, new GpxHandler(gpxTrack));
+			saxParser.parse(gpxFile, new GpxHandler(activity));
 		} catch (SAXException e) {
 			e.printStackTrace();
 			return null;
@@ -42,7 +43,7 @@ public class GpxParser {
 			e.printStackTrace();
 			return null;
 		}
-		return gpxTrack;
+		return activity;
 	}
 
 }

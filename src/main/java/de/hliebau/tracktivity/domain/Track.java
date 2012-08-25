@@ -18,11 +18,7 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 @Entity
 public class Track extends AbstractEntity {
 
-	private String description;
-
 	private MultiLineString lines;
-
-	private String name;
 
 	private List<TrackSegment> segments = new ArrayList<TrackSegment>();
 
@@ -53,10 +49,6 @@ public class Track extends AbstractEntity {
 		lines = GeometryUtils.getInstance().createMultiLineString(segments);
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
 	@Transient
 	public Duration getDuration(boolean includePauses) {
 		if (includePauses) {
@@ -76,10 +68,6 @@ public class Track extends AbstractEntity {
 		return GeometryUtils.getInstance().getTotalDistance(this);
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	@Transient
 	public int getPointsCount() {
 		int count = 0;
@@ -93,14 +81,6 @@ public class Track extends AbstractEntity {
 	@JoinColumn(name = "track_id", insertable = true, nullable = false)
 	public List<TrackSegment> getSegments() {
 		return segments;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public void setSegments(List<TrackSegment> segments) {
