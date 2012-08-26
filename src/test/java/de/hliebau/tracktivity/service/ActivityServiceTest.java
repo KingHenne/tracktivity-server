@@ -95,7 +95,7 @@ public class ActivityServiceTest {
 	public void testImportGpx() {
 		File gpxFile = new File("src/test/resources/track.gpx");
 		long countBefore = activityService.getActivityCount();
-		Activity activity = activityService.importGpxForUser(gpxFile, createTestUser());
+		Activity activity = activityService.importGpxForUser(gpxFile, getPersistentTestUser());
 		Track track = activity.getTrack();
 		Assert.assertNotNull(activity);
 		Assert.assertNotNull(track);

@@ -69,9 +69,11 @@ public class GpxHandler extends DefaultHandler {
 			case TRKSEG:
 				// currentSegment.generateLine();
 				activity.getTrack().addSegment(currentSegment);
+				currentSegment = null;
 				break;
 			case TRKPT:
 				currentSegment.addPoint(currentPoint);
+				currentPoint = null;
 				break;
 			case ELE:
 				double ele = Double.parseDouble(s);
@@ -80,6 +82,9 @@ public class GpxHandler extends DefaultHandler {
 				currentPoint = new TrackPoint(lon, lat, ele);
 				break;
 			case TIME:
+				if (currentPoint == null) {
+					break;
+				}
 				try {
 					Calendar cal = DatatypeConverter.parseDateTime(s);
 					currentPoint.setUtcTime(cal.getTime());

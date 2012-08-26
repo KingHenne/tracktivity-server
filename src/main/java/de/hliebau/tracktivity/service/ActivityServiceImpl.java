@@ -1,10 +1,12 @@
 package de.hliebau.tracktivity.service;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.hliebau.tracktivity.domain.Activity;
@@ -71,11 +73,14 @@ public class ActivityServiceImpl implements ActivityService {
 	@Transactional
 	public Activity importGpxForUser(File gpxFile, User user) {
 		Activity activity = gpxParser.createActivity(gpxFile);
-		if (activity != null) {
-			activity.setUser(user);
-			activityDao.save(activity);
-		}
-		return activity;
+		return setUserForActivity(activity, user);
+	}
+
+	@Override
+	@Transactional
+	public Activity importGpxForUser(InputStream in, User user) {
+		Activity activity = gpxParser.createActivity(in);
+		return setUserForActivity(activity, user);
 	}
 
 	@Override
@@ -90,6 +95,15 @@ public class ActivityServiceImpl implements ActivityService {
 		Activity activity = activityDao.findById(id);
 		if (activity != null) {
 			activity.setTrack(trackDao.findById(activity.getTrack().getId()));
+		}
+		return activity;
+	}
+
+	@Transactional(propagation = Propagation.NESTED)
+	private Activity setUserForActivity(Activity activity, User user) {
+		if (activity != null) {
+			activity.setUser(user);
+			activityDao.save(activity);
 		}
 		return activity;
 	}

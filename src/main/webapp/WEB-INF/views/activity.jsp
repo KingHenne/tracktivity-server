@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -22,7 +23,14 @@
 	</c:when>
 	<c:otherwise>
 		<h1>${activity.name}</h1>
-		<p>created by ${activity.user.username}</p>
+		<dl class="activityData">
+			<dt>Created by:</dt>
+			<dd>${activity.user.username}</dd>
+			<dt>Duration:</dt>
+			<dd>${durationNetto} (${durationBrutto})</dd>
+			<dt>Distance:</dt>
+			<dd><fmt:formatNumber maxFractionDigits="2" value="${activity.track.lengthInMeters / 1000}" /> km</dd>
+		</dl>
 		<div id="map"></div>
 	</c:otherwise>
 </c:choose>
