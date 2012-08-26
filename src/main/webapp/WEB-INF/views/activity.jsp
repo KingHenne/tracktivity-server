@@ -45,13 +45,13 @@
 	
 	L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
 		key: '6eac6d67cf3f4fa8a18bbf5bec747cdc',
-		styleId: 997,
+		styleId: 70963,
 	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
 	    maxZoom: 17,
 	    detectRetina: true
 	}).addTo(map);
 	
-	var polyline = L.multiPolyline(multiPolyline).addTo(map);
+	var polyline = L.multiPolyline(multiPolyline, {color: '#0073E5', opacity: 0.8}).addTo(map);
 </script>
 
 </body>
