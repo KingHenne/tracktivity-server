@@ -16,9 +16,9 @@
 
 <sf:form method="POST" modelAttribute="user">
 	<p>
-		<label for="username">User Name:</label><br/>
+		<label for="username">Username:</label><br/>
 		<sf:errors path="username" cssClass="error" htmlEscape="false" />
-		<sf:input id="username" path="username" size="15" />
+		<sf:input id="username" path="username" size="15" autofocus="autofocus" />
 	</p>
 	<p>
 		<label for="firstname">First Name:</label><br/>
@@ -29,6 +29,11 @@
 		<label for="lastname">Last Name:</label><br/>
 		<sf:errors path="lastname" cssClass="error" />
 		<sf:input id="lastname" path="lastname" size="15" />
+	</p>
+	<p>
+		<label for="password">Password:</label><br/>
+		<sf:errors path="password" cssClass="error" />
+		<sf:password id="password" path="password" size="15" />
 	</p>
 	<p><input type="submit" value="Register" /></p>
 </sf:form>

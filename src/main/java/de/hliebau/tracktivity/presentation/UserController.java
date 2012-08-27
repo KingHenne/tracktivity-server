@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,9 @@ import de.hliebau.tracktivity.service.UserService;
 
 @Controller
 public class UserController {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
@@ -36,26 +40,28 @@ public class UserController {
 		return "users";
 	}
 
-	@RequestMapping(value = "/user/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerUser(Model model) {
 		model.addAttribute(new User());
 		return "register";
 	}
 
-	@RequestMapping(value = "/user/new", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerUser(@Valid User user, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
 			try {
+				String plainPassword = user.getPassword();
+				user.setPassword(passwordEncoder.encodePassword(plainPassword, user));
 				userService.createUser(user);
 			} catch (DataIntegrityViolationException e) {
-				bindingResult.addError(new FieldError("user", "username", "Please choose another user name, <em>"
+				bindingResult.addError(new FieldError("user", "username", "Please choose another username, <em>"
 						+ user.getUsername() + "</em> is already taken."));
 			}
 		}
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
-		return "redirect:" + user.getUsername();
+		return "redirect:user/" + user.getUsername();
 	}
 
 }

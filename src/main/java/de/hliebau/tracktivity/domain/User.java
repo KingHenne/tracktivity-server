@@ -24,8 +24,11 @@ public class User extends AbstractEntity {
 	@Size(min = 2, max = 50, message = "Your last name must be between 2 and 50 characters long.")
 	private String lastname;
 
-	@Size(min = 3, max = 20, message = "The user name must be between 3 and 20 characters long.")
-	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "The user name must be alphanumeric with no spaces.")
+	@Size(min = 6, message = "The password must be at least 6 characters long.")
+	private String password;
+
+	@Size(min = 3, max = 20, message = "The username must be between 3 and 20 characters long.")
+	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "The username must be alphanumeric with no spaces.")
 	private String username;
 
 	public User() {
@@ -58,6 +61,10 @@ public class User extends AbstractEntity {
 		return lastname;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
 	@Column(unique = true)
 	public String getUsername() {
 		return username;
@@ -73,6 +80,10 @@ public class User extends AbstractEntity {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setUsername(String username) {
