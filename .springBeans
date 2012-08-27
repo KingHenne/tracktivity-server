@@ -9,6 +9,7 @@
 	<configs>
 		<config>src/main/resources/spring/application.xml</config>
 		<config>src/main/webapp/WEB-INF/tracktivity-app-servlet.xml</config>
+		<config>src/main/resources/spring/security.xml</config>
 	</configs>
 	<configSets>
 	</configSets>
