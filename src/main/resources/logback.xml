@@ -8,7 +8,8 @@
 	</appender>
 	
 	<logger name="org.hibernate" level="ERROR" />
-	<logger name="org.hibernate.type" level="FINE" />
+<!-- 	<logger name="org.hibernate.type" level="FINE" /> -->
+	<logger name="org.springframework.security" level="DEBUG" />
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
