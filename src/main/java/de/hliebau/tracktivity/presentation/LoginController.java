@@ -2,6 +2,9 @@ package de.hliebau.tracktivity.presentation;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +19,13 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
-	public String loginFailed(Model model) {
-		model.addAttribute("error", true);
-		return "login";
+	public String loginFailed(Model model, HttpServletRequest req) {
+		Object authException = req.getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+		if (authException != null) {
+			model.addAttribute("error", true);
+			return "login";
+		}
+		return "redirect:login";
 	}
 
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
