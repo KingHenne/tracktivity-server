@@ -51,7 +51,7 @@ public class UserController {
 		if (!bindingResult.hasErrors()) {
 			try {
 				String plainPassword = user.getPassword();
-				user.setPassword(passwordEncoder.encodePassword(plainPassword, user));
+				user.setPassword(passwordEncoder.encodePassword(plainPassword, user.getUsername()));
 				userService.createUser(user);
 			} catch (DataIntegrityViolationException e) {
 				bindingResult.addError(new FieldError("user", "username", "Please choose another username, <em>"
