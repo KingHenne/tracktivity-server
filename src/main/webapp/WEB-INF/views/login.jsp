@@ -15,7 +15,7 @@
 
 <h1>Login</h1>
 
-<s:url var="authUrl" value="j_spring_security_check"></s:url>
+<s:url var="authUrl" value="j_spring_security_check" />
 
 <form method="post" action="${authUrl}">
 
