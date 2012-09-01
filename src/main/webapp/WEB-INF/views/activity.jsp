@@ -13,7 +13,7 @@
 
 <link rel="stylesheet" href="/css/normalize.css" type="text/css" />
 <link rel="stylesheet" href="/css/style.css" type="text/css" />
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.css" />
+<link rel="stylesheet" href="/css/leaflet.css" type="text/css" />
 </head>
 <body>
 
@@ -35,7 +35,7 @@
 	</c:otherwise>
 </c:choose>
 
-<script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+<script src="/js/leaflet.js"></script>
 <script type="text/javascript">
 	var multiPolyline = ${activity.track.sparseMultiPolyline};
 	var latLonBounds = ${activity.track.latLngBounds};
