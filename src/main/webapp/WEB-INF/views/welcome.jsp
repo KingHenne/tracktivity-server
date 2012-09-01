@@ -13,7 +13,11 @@
 </head>
 <body>
 
-<h1>Welcome, ${username}</h1>
+<h1>Welcome, ${username}!</h1>
+
+<s:url var="logoutUrl" value="j_spring_security_logout" />
+
+<p><a href="${logoutUrl}">Logout</a></p>
 
 </body>
 </html>
