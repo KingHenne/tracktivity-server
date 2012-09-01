@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 @Aspect
 public class DebugHelper {
 
-	@Pointcut("execution(* de.hliebau.tracktivity.util.GpxParser.createTrack(..))")
+	@Pointcut("execution(* de.hliebau.tracktivity.util.GpxParser.createActivity(..))")
 	public void gpxparsing() {
 	}
 
