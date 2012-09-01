@@ -35,7 +35,7 @@
 		<sf:errors path="password" cssClass="error" />
 		<sf:password id="password" path="password" size="15" />
 	</p>
-	<p><input type="submit" value="Register" /></p>
+	<p><input type="submit" value="Register" onclick="this.disabled='disabled'; this.form.submit();" /></p>
 </sf:form>
 
 </body>

@@ -38,7 +38,7 @@
 		<input type="checkbox" id="remember_me" name="_spring_security_remember_me" />
 		<label for="remember_me">Remember me</label>
 	</p>
-	<p><input type="submit" value="Login" /></p>
+	<p><input type="submit" value="Login" onclick="this.disabled='disabled'; this.form.submit();" /></p>
 </form>
 
 </body>

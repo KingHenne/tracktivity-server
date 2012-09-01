@@ -20,7 +20,7 @@
 		<label for="fileData">GPX File:</label>
 		<input type="file" name="fileData" />
 	</p>
-	<p><input type="submit" value="Upload" /></p>
+	<p><input type="submit" value="Upload" onclick="this.disabled='disabled'; this.form.submit();" /></p>
 </sf:form>
 
 </body>
