@@ -24,7 +24,8 @@
 	</c:when>
 	<c:otherwise>
 		<s:url var="userUrl" value="../user/${activity.user.username}" />
-		<h1>${activity.name}</h1>
+		<fmt:formatDate value="${activity.created}" var="activityDate" type="both" dateStyle="full" timeStyle="short" />
+		<h1><c:out value="${empty activity.name ? activityDate : activity.name}" /></h1>
 		<dl class="activityData">
 			<dt>Created by:</dt>
 			<dd><a href="${userUrl}">${activity.user.username}</a></dd>

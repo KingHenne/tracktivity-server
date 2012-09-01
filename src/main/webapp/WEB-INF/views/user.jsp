@@ -31,7 +31,15 @@
 					<s:url value="../activity/${activity.id}" var="activtyUrl" />
 					<fmt:formatDate value="${activity.created}" var="activityDate" type="date" dateStyle="full" />
 					<fmt:formatDate value="${activity.created}" var="activityTime" type="time" timeStyle="full" />
-					<li><a href="${activtyUrl}">${activity.name}</a> &ndash; ${activityDate}, ${activityTime}</li>
+					<c:choose>
+						<c:when test="${empty activity.name}">
+							<li><a href="${activtyUrl}">${activityDate}, ${activityTime}</a></li>
+						</c:when>
+						<c:otherwise>
+							<li><a href="${activtyUrl}">${activity.name}</a> &ndash; ${activityDate}, ${activityTime}</li>
+						</c:otherwise>
+					</c:choose>
+					
 				</c:forEach>
 				</ul>
 			</c:otherwise>
