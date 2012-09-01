@@ -16,7 +16,7 @@ public interface UserService {
 
 	public User retrieveUser(long id);
 
-	public User retrieveUser(String username);
+	public User retrieveUser(String username, boolean fetchActivities);
 
 	public User updateUser(User user);
 

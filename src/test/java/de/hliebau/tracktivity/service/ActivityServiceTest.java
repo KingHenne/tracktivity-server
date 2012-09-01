@@ -39,7 +39,7 @@ public class ActivityServiceTest {
 
 	protected User getPersistentTestUser() {
 		String userName = "testUser";
-		User user = userService.retrieveUser(userName);
+		User user = userService.retrieveUser(userName, false);
 		if (user == null) {
 			user = new User(userName);
 			userService.createUser(user);

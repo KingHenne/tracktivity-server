@@ -8,10 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.hliebau.tracktivity.domain.User;
+import de.hliebau.tracktivity.persistence.ActivityDao;
 import de.hliebau.tracktivity.persistence.UserDao;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private ActivityDao activityDao;
 
 	@Autowired
 	private UserDao userDao;
@@ -51,8 +55,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User retrieveUser(String username) {
-		return userDao.findByUsername(username);
+	public User retrieveUser(String username, boolean fetchActivities) {
+		User user = userDao.findByUsername(username);
+		if (user != null && fetchActivities) {
+			user.setActivities(activityDao.getUserActivities(user));
+		}
+		return user;
 	}
 
 	@Override

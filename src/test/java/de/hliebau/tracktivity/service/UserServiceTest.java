@@ -43,7 +43,7 @@ public class UserServiceTest {
 
 	@Test
 	public void testAddAndDeleteNewUser() {
-		User testUser = userService.retrieveUser(testUsername);
+		User testUser = userService.retrieveUser(testUsername, false);
 		if (testUser != null) {
 			userService.deleteUser(testUser);
 		}
@@ -80,7 +80,7 @@ public class UserServiceTest {
 
 	@Test
 	public void testFindNonexistentUser() {
-		User user = userService.retrieveUser("nonexistenTestUser");
+		User user = userService.retrieveUser("nonexistenTestUser", false);
 		Assert.assertNull("The return value was not null.", user);
 
 		user = userService.retrieveUser(-1);
@@ -101,7 +101,7 @@ public class UserServiceTest {
 	@Test
 	public void testUsernameCaseInsensitivity() {
 		User testUser = addTestUserWithActivity();
-		User testUserUpper = userService.retrieveUser(testUser.getUsername().toUpperCase());
+		User testUserUpper = userService.retrieveUser(testUser.getUsername().toUpperCase(), false);
 		Assert.assertNotNull("Could not find the test user with uppercase letters.", testUserUpper);
 
 		long countBefore = userService.getUserCount();
