@@ -15,9 +15,10 @@
 
 <h1>Welcome, ${username}!</h1>
 
+<s:url var="userUrl" value="user/${username}" />
 <s:url var="logoutUrl" value="j_spring_security_logout" />
 
-<p><a href="${logoutUrl}">Logout</a></p>
+<p><a href="${userUrl}">Home</a> &bullet; <a href="${logoutUrl}">Logout</a></p>
 
 </body>
 </html>
