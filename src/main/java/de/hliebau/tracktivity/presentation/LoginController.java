@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Model model) {
+	public String login(Model model, Principal principal) {
+		if (principal != null) {
+			return "redirect:welcome";
+		}
 		return "login";
 	}
 
@@ -30,6 +33,9 @@ public class LoginController {
 
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	public String welcome(Model model, Principal principal) {
+		if (principal == null) {
+			return "redirect:login";
+		}
 		String name = principal.getName();
 		model.addAttribute("username", name);
 		return "welcome";
