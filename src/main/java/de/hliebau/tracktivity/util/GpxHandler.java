@@ -1,6 +1,7 @@
 package de.hliebau.tracktivity.util;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -35,6 +36,8 @@ public class GpxHandler extends DefaultHandler {
 
 	private TrackSegment currentSegment;
 
+	private Date date;
+
 	private final Logger logger;
 
 	private final StringBuffer sb = new StringBuffer(128);
@@ -58,6 +61,11 @@ public class GpxHandler extends DefaultHandler {
 			switch (elementName) {
 			case TRK:
 				// gpxTrack.generateLines();
+				if (date != null) {
+					activity.setCreated(date);
+				} else {
+					activity.setCreated(new Date());
+				}
 				break;
 			case NAME:
 				logger.debug("Importing new track with name: " + s);
@@ -87,7 +95,13 @@ public class GpxHandler extends DefaultHandler {
 				}
 				try {
 					Calendar cal = DatatypeConverter.parseDateTime(s);
-					currentPoint.setUtcTime(cal.getTime());
+					Date d = cal.getTime();
+					if (d != null) {
+						currentPoint.setUtcTime(d);
+						if (date == null) {
+							date = d;
+						}
+					}
 				} catch (IllegalArgumentException e) {
 					logger.error("Failed parsing date string: " + s);
 				}

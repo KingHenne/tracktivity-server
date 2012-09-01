@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,7 +14,7 @@
 
 <link rel="stylesheet" href="/css/normalize.css" type="text/css" />
 <link rel="stylesheet" href="/css/style.css" type="text/css" />
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.css" />
+<link rel="stylesheet" href="/css/leaflet.css" type="text/css" />
 </head>
 <body>
 
@@ -22,10 +23,11 @@
 		<h2>The activity with the ID <em>${activityId}</em> does not exist.</h2>
 	</c:when>
 	<c:otherwise>
+		<s:url var="userUrl" value="../user/${activity.user.username}" />
 		<h1>${activity.name}</h1>
 		<dl class="activityData">
 			<dt>Created by:</dt>
-			<dd>${activity.user.username}</dd>
+			<dd><a href="${userUrl}">${activity.user.username}</a></dd>
 			<dt>Duration:</dt>
 			<dd>${durationNetto} (${durationBrutto})</dd>
 			<dt>Distance:</dt>
@@ -35,7 +37,7 @@
 	</c:otherwise>
 </c:choose>
 
-<script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+<script src="/js/leaflet.js"></script>
 <script type="text/javascript">
 	var multiPolyline = ${activity.track.sparseMultiPolyline};
 	var latLonBounds = ${activity.track.latLngBounds};

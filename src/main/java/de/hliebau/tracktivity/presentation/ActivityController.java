@@ -2,6 +2,9 @@ package de.hliebau.tracktivity.presentation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
+
+import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.service.ActivityService;
 import de.hliebau.tracktivity.service.UserService;
 
@@ -38,18 +42,21 @@ public class ActivityController {
 		return "activity";
 	}
 
+	@RolesAllowed("ROLE_USER")
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String uploadActivity(Model model) {
 		model.addAttribute(new UploadItem());
 		return "upload";
 	}
 
+	@RolesAllowed("ROLE_USER")
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public String uploadActivity(UploadItem uploadItem, BindingResult bindingResult) {
+	public String uploadActivity(UploadItem uploadItem, BindingResult bindingResult, Principal principal) {
 		try {
+			User currentUser = userService.retrieveUser(principal.getName(), false);
 			validateFile(uploadItem.getFileData());
 			InputStream in = uploadItem.getFileData().getInputStream();
-			Activity activity = activityService.importGpxForUser(in, userService.retrieveUser("testUser"));
+			Activity activity = activityService.importGpxForUser(in, currentUser);
 			in.close();
 			return "redirect:" + activity.getId();
 		} catch (FileUploadException e) {
