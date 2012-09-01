@@ -101,6 +101,11 @@ public class Track extends AbstractEntity {
 		return sb.append(']').toString();
 	}
 
+	@Transient
+	public TrackPoint getStartingPoint() {
+		return segments.get(0).getStartingPoint();
+	}
+
 	public void setSegments(List<TrackSegment> segments) {
 		this.segments = segments;
 	}
