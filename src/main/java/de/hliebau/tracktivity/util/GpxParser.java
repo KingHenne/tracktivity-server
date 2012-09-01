@@ -1,61 +1,103 @@
 package de.hliebau.tracktivity.util;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.springframework.stereotype.Service;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.Track;
+import de.hliebau.tracktivity.domain.TrackPoint;
+import de.hliebau.tracktivity.domain.TrackSegment;
 
 @Service
 public class GpxParser {
 
-	private SAXParser saxParser;
+	private final XMLInputFactory factory;
 
 	public GpxParser() {
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		try {
-			saxParser = factory.newSAXParser();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
+		factory = XMLInputFactory.newInstance();
 	}
 
-	public Activity createActivity(File gpxFile) {
-		InputSource input = new InputSource(gpxFile.toURI().toASCIIString());
-		return createActivity(input);
-	}
-
-	public Activity createActivity(InputSource is) {
-		if (saxParser == null) {
-			return null;
-		}
+	public Activity createActivity(InputStream in) {
 		Activity activity = new Activity(new Track());
+		TrackPoint currentPoint = null;
+		TrackSegment currentSegment = null;
+
+		Set<String> inElement = new HashSet<String>(20);
+
 		try {
-			saxParser.parse(is, new GpxHandler(activity));
-		} catch (SAXException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
+			XMLStreamReader reader = factory.createXMLStreamReader(in);
+			for (int event = reader.next(); event != XMLStreamConstants.END_DOCUMENT; event = reader.next()) {
+				switch (event) {
+				case XMLStreamConstants.START_ELEMENT:
+					String startElementName = reader.getLocalName().toLowerCase();
+					inElement.add(startElementName);
+					if (startElementName.equals("trkseg")) {
+						currentSegment = new TrackSegment();
+					} else if (startElementName.equals("trkpt")) {
+						double lon = Double.parseDouble(reader.getAttributeValue(null, "lon"));
+						double lat = Double.parseDouble(reader.getAttributeValue(null, "lat"));
+						currentPoint = new TrackPoint(lon, lat);
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					String endElementName = reader.getLocalName().toLowerCase();
+					inElement.remove(endElementName);
+					if (endElementName.equals("trk")) {
+						Date date = activity.getTrack().getStartingPoint().getUtcTime();
+						if (date != null) {
+							activity.setCreated(date);
+						} else {
+							activity.setCreated(new Date());
+						}
+					} else if (endElementName.equals("trkseg")) {
+						activity.getTrack().addSegment(currentSegment);
+						currentSegment = null;
+					} else if (endElementName.equals("trkpt")) {
+						currentSegment.addPoint(currentPoint);
+						currentPoint = null;
+					}
+					break;
+				case XMLStreamConstants.CHARACTERS:
+					if (inElement.contains("trk")) {
+						if (inElement.contains("name")) {
+							activity.setName(reader.getText());
+						} else if (inElement.contains("trkseg") && inElement.contains("trkpt")) {
+							if (inElement.contains("ele")) {
+								double ele = Double.parseDouble(reader.getText());
+								double lon = currentPoint.getPoint().getX();
+								double lat = currentPoint.getPoint().getY();
+								currentPoint = new TrackPoint(lon, lat, ele);
+							} else if (inElement.contains("time")) {
+								Calendar cal = DatatypeConverter.parseDateTime(reader.getText());
+								currentPoint.setUtcTime(cal.getTime());
+							}
+						}
+					}
+					break;
+				case XMLStreamConstants.CDATA:
+					if (inElement.contains("trk") && inElement.contains("name")) {
+						activity.setName(reader.getText());
+					}
+					break;
+				}
+			}
+			reader.close();
+		} catch (XMLStreamException e) {
 			e.printStackTrace();
 			return null;
 		}
 		return activity;
-	}
-
-	public Activity createActivity(InputStream in) {
-		InputSource input = new InputSource(in);
-		return createActivity(input);
 	}
 
 }

@@ -1,6 +1,5 @@
 package de.hliebau.tracktivity.service;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -23,8 +22,6 @@ public interface ActivityService {
 	public long getTrackCount();
 
 	public List<Activity> getUserActivities(User user);
-
-	public Activity importGpxForUser(File gpxFile, User user);
 
 	public Activity importGpxForUser(InputStream in, User user);
 

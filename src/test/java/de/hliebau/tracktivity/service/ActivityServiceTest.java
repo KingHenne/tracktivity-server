@@ -1,6 +1,6 @@
 package de.hliebau.tracktivity.service;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class ActivityServiceTest {
 	@Test
 	@Rollback(value = false)
 	public void importMultipleTracks() {
-		File gpxFile = new File("src/test/resources/track.gpx");
+		InputStream gpxFile = this.getClass().getResourceAsStream("/track.gpx");
 		User testUser = getPersistentTestUser();
 		long countBefore = activityService.getTrackCount();
 		final int COUNT = 30;
@@ -93,7 +93,7 @@ public class ActivityServiceTest {
 	@Test
 	@Rollback(true)
 	public void testImportGpx() {
-		File gpxFile = new File("src/test/resources/track.gpx");
+		InputStream gpxFile = this.getClass().getResourceAsStream("/track.gpx");
 		long countBefore = activityService.getActivityCount();
 		Activity activity = activityService.importGpxForUser(gpxFile, getPersistentTestUser());
 		Track track = activity.getTrack();
