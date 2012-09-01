@@ -21,7 +21,7 @@ public class JpaActivityDao extends AbstractJpaDao<Activity> implements Activity
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Activity> q = cb.createQuery(Activity.class);
 		Root<Activity> activity = q.from(Activity.class);
-		CriteriaQuery<Activity> select = q.select(activity).orderBy(cb.desc(activity.get(Activity_.utcStart)));
+		CriteriaQuery<Activity> select = q.select(activity).orderBy(cb.desc(activity.get(Activity_.created)));
 		TypedQuery<Activity> typedQuery = entityManager.createQuery(select).setMaxResults(count);
 		return typedQuery.getResultList();
 	}
@@ -32,7 +32,7 @@ public class JpaActivityDao extends AbstractJpaDao<Activity> implements Activity
 		CriteriaQuery<Activity> q = cb.createQuery(Activity.class);
 		Root<Activity> activity = q.from(Activity.class);
 		CriteriaQuery<Activity> select = q.select(activity).where(cb.equal(activity.get(Activity_.user), user))
-				.orderBy(cb.desc(activity.get(Activity_.utcStart)));
+				.orderBy(cb.desc(activity.get(Activity_.created)));
 		TypedQuery<Activity> typedQuery = entityManager.createQuery(select);
 		return typedQuery.getResultList();
 	}

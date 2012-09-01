@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 @Entity
 public class Activity extends AbstractEntity {
 
+	private Date created;
+
 	private String description;
 
 	private String name;
@@ -26,8 +28,6 @@ public class Activity extends AbstractEntity {
 
 	private User user;
 
-	private Date utcStart;
-
 	public Activity() {
 	}
 
@@ -37,6 +37,11 @@ public class Activity extends AbstractEntity {
 
 	public Activity(Track track) {
 		this.track = track;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getCreated() {
+		return created;
 	}
 
 	public String getDescription() {
@@ -63,9 +68,8 @@ public class Activity extends AbstractEntity {
 		return user;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getUtcStart() {
-		return utcStart;
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 
 	public void setDescription(String description) {
@@ -86,10 +90,6 @@ public class Activity extends AbstractEntity {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public void setUtcStart(Date utcStart) {
-		this.utcStart = utcStart;
 	}
 
 }
