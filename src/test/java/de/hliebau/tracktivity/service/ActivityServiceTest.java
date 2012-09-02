@@ -105,6 +105,9 @@ public class ActivityServiceTest {
 		Assert.assertEquals("Bergtour 2", activity.getName());
 		Assert.assertEquals("The track count has not been increased by 1.", countBefore + 1,
 				activityService.getActivityCount());
+
+		String exportedGpx = activityService.exportActivityAsGpx(activity);
+		Assert.assertNotNull(exportedGpx);
 	}
 
 	@Test

@@ -40,6 +40,11 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
+	public String exportActivityAsGpx(Activity activity) {
+		return gpxParser.exportActivity(activity);
+	}
+
+	@Override
 	public long getActivityCount() {
 		return activityDao.getCount();
 	}

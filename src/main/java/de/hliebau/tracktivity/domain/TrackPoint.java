@@ -35,6 +35,14 @@ public class TrackPoint extends AbstractEntity {
 	}
 
 	@Transient
+	public Double getElevation() {
+		if (!Double.isNaN(this.point.getCoordinate().z)) {
+			return point.getCoordinate().z;
+		}
+		return null;
+	}
+
+	@Transient
 	public double getLatitude() {
 		return point.getY();
 	}

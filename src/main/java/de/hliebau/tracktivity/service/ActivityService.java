@@ -13,6 +13,8 @@ public interface ActivityService {
 
 	public void createTrack(Track track);
 
+	public String exportActivityAsGpx(Activity activity);
+
 	public long getActivityCount();
 
 	public List<Activity> getRecentActivities(int count);
