@@ -1,6 +1,5 @@
 package de.hliebau.tracktivity.service;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -41,6 +40,11 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
+	public String exportActivityAsGpx(Activity activity) {
+		return gpxParser.exportActivity(activity);
+	}
+
+	@Override
 	public long getActivityCount() {
 		return activityDao.getCount();
 	}
@@ -67,13 +71,6 @@ public class ActivityServiceImpl implements ActivityService {
 	@Transactional(readOnly = true)
 	public List<Activity> getUserActivities(User user) {
 		return activityDao.getUserActivities(user);
-	}
-
-	@Override
-	@Transactional
-	public Activity importGpxForUser(File gpxFile, User user) {
-		Activity activity = gpxParser.createActivity(gpxFile);
-		return setUserForActivity(activity, user);
 	}
 
 	@Override
