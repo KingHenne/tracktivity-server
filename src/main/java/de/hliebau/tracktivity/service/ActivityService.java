@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.User;
 
@@ -25,7 +26,7 @@ public interface ActivityService {
 
 	public List<Activity> getUserActivities(User user);
 
-	public Activity importGpxForUser(InputStream in, User user);
+	public Activity importGpxAsUserActivity(InputStream in, User user, ActivityType type);
 
 	public Activity retrieveActivity(Long id);
 

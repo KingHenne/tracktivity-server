@@ -17,7 +17,11 @@
 <sf:form method="POST" enctype="multipart/form-data" modelAttribute="uploadItem">
 	<sf:errors path="fileData" element="p" cssClass="error" />
 	<p>
-		<label for="fileData">GPX File:</label>
+		<label for="activityTypes">Activity type:</label><br/>
+		<sf:select path="activityType" id="activityTypes" items="${activityTypes}" itemLabel="label" />
+	</p>
+	<p>
+		<label for="fileData">GPX File:</label><br/>
 		<input type="file" name="fileData" />
 	</p>
 	<p><input type="submit" value="Upload" onclick="this.disabled='disabled'; this.form.submit();" /></p>

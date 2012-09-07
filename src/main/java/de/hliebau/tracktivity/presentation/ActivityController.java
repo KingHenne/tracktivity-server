@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.service.ActivityService;
 import de.hliebau.tracktivity.service.UserService;
@@ -46,6 +47,7 @@ public class ActivityController {
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String uploadActivity(Model model) {
 		model.addAttribute(new UploadItem());
+		model.addAttribute("activityTypes", ActivityType.values());
 		return "upload";
 	}
 
@@ -54,9 +56,10 @@ public class ActivityController {
 	public String uploadActivity(UploadItem uploadItem, BindingResult bindingResult, Principal principal) {
 		try {
 			User currentUser = userService.retrieveUser(principal.getName(), false);
+			ActivityType type = uploadItem.getActivityType();
 			validateFile(uploadItem.getFileData());
 			InputStream in = uploadItem.getFileData().getInputStream();
-			Activity activity = activityService.importGpxForUser(in, currentUser);
+			Activity activity = activityService.importGpxAsUserActivity(in, currentUser, type);
 			in.close();
 			return "redirect:" + activity.getId();
 		} catch (FileUploadException e) {

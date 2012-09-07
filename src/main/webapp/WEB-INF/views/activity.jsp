@@ -29,6 +29,10 @@
 		<dl class="activityData">
 			<dt>Created by:</dt>
 			<dd><a href="${userUrl}">${activity.user.username}</a></dd>
+		<c:if test="${not empty activity.type}">
+			<dt>Activity type:</dt>
+			<dd>${activity.type.label}</dd>
+		</c:if>
 			<dt>Duration:</dt>
 			<dd>${durationNetto} (${durationBrutto})</dd>
 			<dt>Distance:</dt>

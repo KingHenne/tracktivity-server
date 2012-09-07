@@ -17,6 +17,7 @@
 
 <p><em>fetched in ${fetchTime} ms</em></p>
 
+<ul>
 <c:forEach var="activity" items="${activities}">
 	<s:url value="user/{username}" var="user_url">
 		<s:param name="username" value="${activity.user.username}" />
@@ -25,8 +26,9 @@
 		<s:param name="activty_id" value="${activity.id}" />
 	</s:url>
 	<fmt:formatDate value="${activity.created}" var="activityDate" type="both" dateStyle="full" timeStyle="short" />
-	<a href="${activty_url}"><c:out value="${empty activity.name ? activityDate : activity.name}" /></a>, created by <a href="${user_url}">${activity.user.username}</a><br/>
+	<li><a href="${activty_url}"><c:out value="${empty activity.name ? activityDate : activity.name}" /></a>, created by <a href="${user_url}">${activity.user.username}</a></li>
 </c:forEach>
+</ul>
 
 </body>
 </html>

@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.TrackPoint;
 import de.hliebau.tracktivity.domain.TrackSegment;
@@ -42,6 +43,8 @@ public class ActivityServiceTest {
 		User user = userService.retrieveUser(userName, false);
 		if (user == null) {
 			user = new User(userName);
+			user.setFirstname("Test");
+			user.setLastname("User");
 			userService.createUser(user);
 		}
 		return user;
@@ -55,7 +58,7 @@ public class ActivityServiceTest {
 		long countBefore = activityService.getTrackCount();
 		final int COUNT = 30;
 		for (int i = 0; i < COUNT; i++) {
-			activityService.importGpxForUser(gpxFile, testUser);
+			activityService.importGpxAsUserActivity(gpxFile, testUser, ActivityType.CYCLING);
 		}
 		Assert.assertEquals(String.format("The track count has not been increased by %d.", COUNT), countBefore + COUNT,
 				activityService.getTrackCount());
@@ -95,7 +98,8 @@ public class ActivityServiceTest {
 	public void testImportGpx() {
 		InputStream gpxFile = this.getClass().getResourceAsStream("/track.gpx");
 		long countBefore = activityService.getActivityCount();
-		Activity activity = activityService.importGpxForUser(gpxFile, getPersistentTestUser());
+		Activity activity = activityService.importGpxAsUserActivity(gpxFile, getPersistentTestUser(),
+				ActivityType.CYCLING);
 		Track track = activity.getTrack();
 		Assert.assertNotNull(activity);
 		Assert.assertNotNull(track);

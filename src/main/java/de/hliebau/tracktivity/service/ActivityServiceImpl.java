@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.persistence.ActivityDao;
@@ -75,9 +75,14 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Override
 	@Transactional
-	public Activity importGpxForUser(InputStream in, User user) {
+	public Activity importGpxAsUserActivity(InputStream in, User user, ActivityType type) {
 		Activity activity = gpxParser.createActivity(in);
-		return setUserForActivity(activity, user);
+		if (activity != null) {
+			activity.setUser(user);
+			activity.setType(type);
+			activityDao.save(activity);
+		}
+		return activity;
 	}
 
 	@Override
@@ -92,15 +97,6 @@ public class ActivityServiceImpl implements ActivityService {
 		Activity activity = activityDao.findById(id);
 		if (activity != null) {
 			activity.setTrack(trackDao.findById(activity.getTrack().getId()));
-		}
-		return activity;
-	}
-
-	@Transactional(propagation = Propagation.NESTED)
-	private Activity setUserForActivity(Activity activity, User user) {
-		if (activity != null) {
-			activity.setUser(user);
-			activityDao.save(activity);
 		}
 		return activity;
 	}
