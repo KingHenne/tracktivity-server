@@ -28,7 +28,7 @@
 				<h2>Activities</h2>
 				<ul>
 				<c:forEach var="activity" items="${user.activities}">
-					<s:url value="../activity/${activity.id}" var="activtyUrl" />
+					<s:url value="../activities/${activity.id}" var="activtyUrl" />
 					<fmt:formatDate value="${activity.created}" var="activityDate" type="date" dateStyle="full" />
 					<fmt:formatDate value="${activity.created}" var="activityTime" type="time" timeStyle="full" />
 					<c:choose>

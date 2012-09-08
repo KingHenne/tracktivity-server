@@ -23,7 +23,7 @@
 		<h2>The activity with the ID <em>${activityId}</em> does not exist.</h2>
 	</c:when>
 	<c:otherwise>
-		<s:url var="userUrl" value="../user/${activity.user.username}" />
+		<s:url var="userUrl" value="../users/${activity.user.username}" />
 		<fmt:formatDate value="${activity.created}" var="activityDate" type="both" dateStyle="full" timeStyle="short" />
 		<h1><c:out value="${empty activity.name ? activityDate : activity.name}" /></h1>
 		<dl class="activityData">

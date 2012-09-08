@@ -16,7 +16,7 @@ public class HomeController {
 	@Autowired
 	private ActivityService activityService;
 
-	@RequestMapping({ "/" })
+	@RequestMapping("/")
 	public String showHomePage(Map<String, Object> model) {
 		long start = System.currentTimeMillis();
 		List<Activity> activities = activityService.getRecentActivities(50);

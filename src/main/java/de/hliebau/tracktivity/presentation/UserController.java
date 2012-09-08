@@ -25,7 +25,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
 	public String displayUserProfile(@PathVariable String username, Model model) {
 		User user = userService.retrieveUser(username, true);
 		if (user != null) {

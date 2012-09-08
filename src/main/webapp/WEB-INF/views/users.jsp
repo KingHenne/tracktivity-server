@@ -16,10 +16,7 @@
 <h1>Tracktivity Users</h1>
 
 <c:forEach var="user" items="${userList}">
-	<s:url value="user/{username}" var="user_url">
-		<s:param name="username" value="${user.username}" />
-	</s:url>
-	${user.lastname}, ${user.firstname} &ndash; <a href="${user_url}">${user.username}</a><br/>
+	${user.lastname}, ${user.firstname} &ndash; <a href="${user.username}">${user.username}</a><br/>
 </c:forEach>
 
 </body>

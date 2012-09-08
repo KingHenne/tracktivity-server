@@ -23,7 +23,7 @@ import de.hliebau.tracktivity.service.ActivityService;
 import de.hliebau.tracktivity.service.UserService;
 
 @Controller
-@RequestMapping({ "/activity" })
+@RequestMapping("/activities")
 public class ActivityController {
 
 	@Autowired

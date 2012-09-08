@@ -19,10 +19,10 @@
 
 <ul>
 <c:forEach var="activity" items="${activities}">
-	<s:url value="user/{username}" var="user_url">
+	<s:url value="users/{username}" var="user_url">
 		<s:param name="username" value="${activity.user.username}" />
 	</s:url>
-	<s:url value="activity/{activty_id}" var="activty_url">
+	<s:url value="activities/{activty_id}" var="activty_url">
 		<s:param name="activty_id" value="${activity.id}" />
 	</s:url>
 	<fmt:formatDate value="${activity.created}" var="activityDate" type="both" dateStyle="full" timeStyle="short" />
