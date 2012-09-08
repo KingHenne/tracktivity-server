@@ -10,28 +10,13 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 		
-	<mvc:resources location="/css/" mapping="/css/**" />
-	<mvc:resources location="/js/" mapping="/js/**" />
-	
 	<mvc:annotation-driven />
 	
-	<!-- Scan the the presentation package for Spring MVC controllers. -->
-	<context:component-scan base-package="de.hliebau.tracktivity.presentation">
+	<!-- Scan the the api package for Spring MVC controllers (i.e. REST services). -->
+	<context:component-scan base-package="de.hliebau.tracktivity.api">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
 	<security:global-method-security jsr250-annotations="enabled" />
-	
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/views/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
-	
-	<!-- We need a multipart resolver to extract multipart data out of a POST request so that
-	     the DispatcherServlet can give it to a controller handling a form with file input. -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-		p:maxUploadSize="5000000" />
 	
 </beans>
