@@ -12,13 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
+@XmlRootElement
 public class Activity extends AbstractEntity {
 
 	private Date created;
-
-	private String description;
 
 	private String name;
 
@@ -44,16 +45,13 @@ public class Activity extends AbstractEntity {
 		return created;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, orphanRemoval = true)
 	@JoinColumn(name = "track_id", insertable = true, nullable = true)
+	@XmlTransient
 	public Track getTrack() {
 		return track;
 	}
@@ -64,16 +62,13 @@ public class Activity extends AbstractEntity {
 	}
 
 	@ManyToOne(optional = false)
+	@XmlTransient
 	public User getUser() {
 		return user;
 	}
 
 	public void setCreated(Date created) {
 		this.created = created;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public void setName(String name) {
