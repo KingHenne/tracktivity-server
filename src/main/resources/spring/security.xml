@@ -11,6 +11,7 @@
 		<logout logout-success-url="/app/login" />
 		<intercept-url pattern="/app/login" requires-channel="https" />
 		<intercept-url pattern="/app/register" requires-channel="https" />
+		<http-basic />
 	</http>
 
 	<beans:bean id="passwordEncoder"
