@@ -11,9 +11,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "TracktivityUser")
+@XmlRootElement
 public class User extends AbstractEntity {
 
 	private List<Activity> activities = new ArrayList<Activity>();
@@ -49,6 +52,9 @@ public class User extends AbstractEntity {
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
+	// @XmlElementWrapper(name = "activities")
+	// @XmlElement(name = "activity")
+	@XmlTransient
 	public List<Activity> getActivities() {
 		return activities;
 	}
@@ -61,6 +67,7 @@ public class User extends AbstractEntity {
 		return lastname;
 	}
 
+	@XmlTransient
 	public String getPassword() {
 		return password;
 	}
