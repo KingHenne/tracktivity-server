@@ -1,6 +1,7 @@
 package de.hliebau.tracktivity.domain;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
@@ -11,11 +12,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.Point;
 
 import de.hliebau.tracktivity.util.GeometryUtils;
@@ -24,6 +25,16 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 @XmlAccessorType(XmlAccessType.NONE)
 @JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class TrackPoint extends AbstractEntity {
+
+	public static TrackPoint fromJSON(Map<String, Object> props) {
+		double lon = Double.parseDouble(props.get("lon").toString());
+		double lat = Double.parseDouble(props.get("lat").toString());
+		double ele = Double.parseDouble(props.get("ele").toString());
+		Date time = new Date(Long.parseLong(props.get("time").toString()));
+		TrackPoint point = new TrackPoint(lon, lat, ele);
+		point.setUtcTime(time);
+		return point;
+	}
 
 	private Point point;
 

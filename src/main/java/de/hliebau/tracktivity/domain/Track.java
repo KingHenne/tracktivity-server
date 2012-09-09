@@ -2,6 +2,7 @@ package de.hliebau.tracktivity.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,10 +15,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiLineString;
 
@@ -27,6 +28,15 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 @XmlAccessorType(XmlAccessType.NONE)
 @JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class Track extends AbstractEntity {
+
+	@JsonCreator
+	public static Track fromJSON(@JsonProperty("segments") List<Map<String, List<Map<String, Object>>>> segments) {
+		Track track = new Track();
+		for (Map<String, List<Map<String, Object>>> props : segments) {
+			track.addSegment(TrackSegment.fromJSON(props.get("points")));
+		}
+		return track;
+	}
 
 	private MultiLineString lines;
 

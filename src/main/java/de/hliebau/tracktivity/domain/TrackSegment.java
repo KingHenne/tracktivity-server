@@ -2,6 +2,7 @@ package de.hliebau.tracktivity.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,10 +15,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.LineString;
 
 import de.hliebau.tracktivity.util.GeometryUtils;
@@ -26,6 +27,15 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 @XmlAccessorType(XmlAccessType.NONE)
 @JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class TrackSegment extends AbstractEntity {
+
+	@JsonCreator
+	public static TrackSegment fromJSON(@JsonProperty("points") List<Map<String, Object>> points) {
+		TrackSegment segment = new TrackSegment();
+		for (Map<String, Object> props : points) {
+			segment.addPoint(TrackPoint.fromJSON(props));
+		}
+		return segment;
+	}
 
 	private LineString line;
 
