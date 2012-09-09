@@ -11,12 +11,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 @Table(name = "TracktivityUser")
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class User extends AbstractEntity {
 
 	private List<Activity> activities = new ArrayList<Activity>();
@@ -52,27 +60,29 @@ public class User extends AbstractEntity {
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
-	// @XmlElementWrapper(name = "activities")
-	// @XmlElement(name = "activity")
-	@XmlTransient
 	public List<Activity> getActivities() {
 		return activities;
 	}
 
+	@XmlElement
+	@JsonProperty
 	public String getFirstname() {
 		return firstname;
 	}
 
+	@XmlElement
+	@JsonProperty
 	public String getLastname() {
 		return lastname;
 	}
 
-	@XmlTransient
 	public String getPassword() {
 		return password;
 	}
 
 	@Column(unique = true)
+	@XmlElement
+	@JsonProperty
 	public String getUsername() {
 		return username;
 	}

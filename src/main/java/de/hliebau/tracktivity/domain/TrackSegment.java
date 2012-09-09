@@ -14,12 +14,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.vividsolutions.jts.geom.LineString;
 
 import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class TrackSegment extends AbstractEntity {
 
 	private LineString line;
@@ -70,6 +75,7 @@ public class TrackSegment extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "segment_id", insertable = true, nullable = false)
 	@XmlElement(name = "trkpt")
+	@JsonProperty
 	public List<TrackPoint> getPoints() {
 		return points;
 	}

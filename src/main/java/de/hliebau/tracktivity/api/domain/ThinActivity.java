@@ -25,8 +25,8 @@ public class ThinActivity {
 		return activity.getCreated();
 	}
 
-	@XmlAttribute(name = "ref")
-	public String getUrl() {
+	@XmlAttribute
+	public String getRef() {
 		return String.format("/activities/%d", activity.getId());
 	}
 

@@ -19,9 +19,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 @Entity
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class Activity extends AbstractEntity {
 
 	private Date created;
@@ -47,6 +52,7 @@ public class Activity extends AbstractEntity {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@XmlElement
+	@JsonProperty
 	public Date getCreated() {
 		return created;
 	}
@@ -54,11 +60,13 @@ public class Activity extends AbstractEntity {
 	@Override
 	@Transient
 	@XmlAttribute
+	@JsonProperty
 	public Long getId() {
 		return super.getId();
 	}
 
 	@XmlElement
+	@JsonProperty
 	public String getName() {
 		return name;
 	}
@@ -66,12 +74,14 @@ public class Activity extends AbstractEntity {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, orphanRemoval = true)
 	@JoinColumn(name = "track_id", insertable = true, nullable = true)
 	@XmlElement(name = "trk")
+	@JsonProperty
 	public Track getTrack() {
 		return track;
 	}
 
 	@Enumerated(EnumType.STRING)
 	@XmlElement
+	@JsonProperty
 	public ActivityType getType() {
 		return type;
 	}

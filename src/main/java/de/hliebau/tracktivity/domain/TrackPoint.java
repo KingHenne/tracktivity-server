@@ -11,6 +11,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Type;
 
 import com.vividsolutions.jts.geom.Point;
@@ -19,6 +22,7 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class TrackPoint extends AbstractEntity {
 
 	private Point point;
@@ -41,6 +45,7 @@ public class TrackPoint extends AbstractEntity {
 
 	@Transient
 	@XmlElement(name = "ele")
+	@JsonProperty("ele")
 	public Double getElevation() {
 		if (!Double.isNaN(this.point.getCoordinate().z)) {
 			return point.getCoordinate().z;
@@ -50,12 +55,14 @@ public class TrackPoint extends AbstractEntity {
 
 	@Transient
 	@XmlAttribute(name = "lat")
+	@JsonProperty("lat")
 	public double getLatitude() {
 		return point.getY();
 	}
 
 	@Transient
 	@XmlAttribute(name = "lon")
+	@JsonProperty("lon")
 	public double getLongitude() {
 		return point.getX();
 	}
@@ -67,6 +74,7 @@ public class TrackPoint extends AbstractEntity {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@XmlElement(name = "time")
+	@JsonProperty("time")
 	public Date getUtcTime() {
 		return utcTime;
 	}
