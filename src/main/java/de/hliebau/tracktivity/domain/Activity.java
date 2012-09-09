@@ -12,11 +12,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
 public class Activity extends AbstractEntity {
 
 	private Date created;
@@ -41,28 +46,37 @@ public class Activity extends AbstractEntity {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@XmlElement
 	public Date getCreated() {
 		return created;
 	}
 
+	@Override
+	@Transient
+	@XmlAttribute
+	public Long getId() {
+		return super.getId();
+	}
+
+	@XmlElement
 	public String getName() {
 		return name;
 	}
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, orphanRemoval = true)
 	@JoinColumn(name = "track_id", insertable = true, nullable = true)
-	@XmlTransient
+	@XmlElement(name = "trk")
 	public Track getTrack() {
 		return track;
 	}
 
 	@Enumerated(EnumType.STRING)
+	@XmlElement
 	public ActivityType getType() {
 		return type;
 	}
 
 	@ManyToOne(optional = false)
-	@XmlTransient
 	public User getUser() {
 		return user;
 	}

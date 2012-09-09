@@ -6,6 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.hibernate.annotations.Type;
 
@@ -14,6 +18,7 @@ import com.vividsolutions.jts.geom.Point;
 import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
+@XmlAccessorType(XmlAccessType.NONE)
 public class TrackPoint extends AbstractEntity {
 
 	private Point point;
@@ -35,6 +40,7 @@ public class TrackPoint extends AbstractEntity {
 	}
 
 	@Transient
+	@XmlElement(name = "ele")
 	public Double getElevation() {
 		if (!Double.isNaN(this.point.getCoordinate().z)) {
 			return point.getCoordinate().z;
@@ -43,11 +49,13 @@ public class TrackPoint extends AbstractEntity {
 	}
 
 	@Transient
+	@XmlAttribute(name = "lat")
 	public double getLatitude() {
 		return point.getY();
 	}
 
 	@Transient
+	@XmlAttribute(name = "lon")
 	public double getLongitude() {
 		return point.getX();
 	}
@@ -58,6 +66,7 @@ public class TrackPoint extends AbstractEntity {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@XmlElement(name = "time")
 	public Date getUtcTime() {
 		return utcTime;
 	}

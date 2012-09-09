@@ -3,8 +3,11 @@ package de.hliebau.tracktivity.domain;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 @MappedSuperclass
+@XmlAccessorType(XmlAccessType.NONE)
 public abstract class AbstractEntity {
 
 	private Long id;

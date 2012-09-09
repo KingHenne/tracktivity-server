@@ -10,6 +10,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiLineString;
@@ -17,6 +20,7 @@ import com.vividsolutions.jts.geom.MultiLineString;
 import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
+@XmlAccessorType(XmlAccessType.NONE)
 public class Track extends AbstractEntity {
 
 	private MultiLineString lines;
@@ -86,6 +90,7 @@ public class Track extends AbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "track_id", insertable = true, nullable = false)
+	@XmlElement(name = "trkseg")
 	public List<TrackSegment> getSegments() {
 		return segments;
 	}

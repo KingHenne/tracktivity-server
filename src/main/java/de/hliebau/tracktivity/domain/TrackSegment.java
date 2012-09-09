@@ -10,12 +10,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 import com.vividsolutions.jts.geom.LineString;
 
 import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
+@XmlAccessorType(XmlAccessType.NONE)
 public class TrackSegment extends AbstractEntity {
 
 	private LineString line;
@@ -65,6 +69,7 @@ public class TrackSegment extends AbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "segment_id", insertable = true, nullable = false)
+	@XmlElement(name = "trkpt")
 	public List<TrackPoint> getPoints() {
 		return points;
 	}
