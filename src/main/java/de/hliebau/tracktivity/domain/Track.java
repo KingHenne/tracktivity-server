@@ -1,8 +1,6 @@
 package de.hliebau.tracktivity.domain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,7 +15,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiLineString;
@@ -29,31 +26,23 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 @JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class Track extends AbstractEntity {
 
-	@JsonCreator
-	public static Track fromJSON(@JsonProperty("segments") List<Map<String, List<Map<String, Object>>>> segments) {
-		Track track = new Track();
-		for (Map<String, List<Map<String, Object>>> props : segments) {
-			track.addSegment(TrackSegment.fromJSON(props.get("points")));
-		}
-		return track;
-	}
-
 	private MultiLineString lines;
 
-	private List<TrackSegment> segments = new ArrayList<TrackSegment>();
+	@JsonProperty
+	private TrackSegments segments;
 
 	public Track() {
 		super();
 	}
 
-	public Track(List<TrackSegment> segments) {
-		this();
-		this.setSegments(segments);
-	}
-
 	public Track(TrackSegment segment) {
 		this();
 		this.addSegment(segment);
+	}
+
+	public Track(TrackSegments segments) {
+		this();
+		this.setSegments(segments);
 	}
 
 	public void addSegment(TrackSegment segment) {
@@ -106,7 +95,6 @@ public class Track extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "track_id", insertable = true, nullable = false)
 	@XmlElement(name = "trkseg")
-	@JsonProperty
 	public List<TrackSegment> getSegments() {
 		return segments;
 	}
@@ -127,7 +115,7 @@ public class Track extends AbstractEntity {
 		return segments.get(0).getStartingPoint();
 	}
 
-	public void setSegments(List<TrackSegment> segments) {
+	public void setSegments(TrackSegments segments) {
 		this.segments = segments;
 	}
 

@@ -1,8 +1,6 @@
 package de.hliebau.tracktivity.domain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,7 +15,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.LineString;
 
@@ -28,24 +25,16 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 @JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class TrackSegment extends AbstractEntity {
 
-	@JsonCreator
-	public static TrackSegment fromJSON(@JsonProperty("points") List<Map<String, Object>> points) {
-		TrackSegment segment = new TrackSegment();
-		for (Map<String, Object> props : points) {
-			segment.addPoint(TrackPoint.fromJSON(props));
-		}
-		return segment;
-	}
-
 	private LineString line;
 
-	private List<TrackPoint> points = new ArrayList<TrackPoint>();
+	@JsonProperty
+	private TrackPoints points;
 
 	public TrackSegment() {
 		super();
 	}
 
-	public TrackSegment(List<TrackPoint> points) {
+	public TrackSegment(TrackPoints points) {
 		this();
 		this.setPoints(points);
 	}
@@ -85,7 +74,6 @@ public class TrackSegment extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "segment_id", insertable = true, nullable = false)
 	@XmlElement(name = "trkpt")
-	@JsonProperty
 	public List<TrackPoint> getPoints() {
 		return points;
 	}
@@ -106,7 +94,7 @@ public class TrackSegment extends AbstractEntity {
 		return points.get(0);
 	}
 
-	public void setPoints(List<TrackPoint> points) {
+	public void setPoints(TrackPoints points) {
 		this.points = points;
 	}
 
