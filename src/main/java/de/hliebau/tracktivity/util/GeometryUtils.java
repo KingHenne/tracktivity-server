@@ -36,8 +36,8 @@ public class GeometryUtils {
 		}
 		StringBuilder sb = new StringBuilder(coords.length * 21);
 		sb.append('[');
-		for (int i = 0; i < coords.length; i++) {
-			sb.append(toLatLngString(coords[i])).append(',');
+		for (Coordinate coord : coords) {
+			sb.append(toLatLngString(coord)).append(',');
 		}
 		sb.deleteCharAt(sb.length() - 1); // remove last comma
 		return sb.append(']').toString();
@@ -61,8 +61,13 @@ public class GeometryUtils {
 
 	private GeodeticCalculator geocalc;
 
+	private final GeometryFactory geometryFactory;
+
 	@Autowired
-	private GeometryFactory geometryFactory;
+	public GeometryUtils(GeometryFactory geometryFactory) {
+		this.geometryFactory = geometryFactory;
+		this.initialize();
+	}
 
 	public LineString createLineString(List<TrackPoint> points) {
 		Coordinate[] coordinates = new Coordinate[points.size()];
