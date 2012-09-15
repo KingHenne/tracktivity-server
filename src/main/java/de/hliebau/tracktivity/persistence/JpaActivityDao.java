@@ -1,5 +1,6 @@
 package de.hliebau.tracktivity.persistence;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -35,6 +36,14 @@ public class JpaActivityDao extends AbstractJpaDao<Activity> implements Activity
 				.orderBy(cb.desc(activity.get(Activity_.created)));
 		TypedQuery<Activity> typedQuery = entityManager.createQuery(select);
 		return typedQuery.getResultList();
+	}
+
+	@Override
+	public void save(Activity activity) {
+		if (activity.getCreated() == null) {
+			activity.setCreated(new Date());
+		}
+		super.save(activity);
 	}
 
 }

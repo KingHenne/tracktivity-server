@@ -58,6 +58,10 @@ public class User extends AbstractEntity {
 		activities.remove(activity);
 	}
 
+	public boolean equals(User user) {
+		return user.getId() == this.getId();
+	}
+
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	public List<Activity> getActivities() {

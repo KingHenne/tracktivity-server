@@ -26,6 +26,16 @@ public class ThinActivity {
 	}
 
 	@XmlAttribute
+	public Long getId() {
+		return activity.getId();
+	}
+
+	@XmlElement
+	public String getName() {
+		return activity.getName();
+	}
+
+	@XmlElement
 	public String getRef() {
 		return String.format("/activities/%d", activity.getId());
 	}
