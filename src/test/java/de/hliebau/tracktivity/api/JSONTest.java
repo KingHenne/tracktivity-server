@@ -17,7 +17,7 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 public class JSONTest {
 
 	@Test
-	public void testConvertJSONToProduct() throws Exception {
+	public void testConvertJSONToActivity() throws Exception {
 		// Create the shared instance of GeometryUtils.
 		new GeometryUtils(new GeometryFactory(new PrecisionModel(), 4326));
 

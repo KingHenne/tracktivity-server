@@ -28,21 +28,20 @@ public class Track extends AbstractEntity {
 
 	private MultiLineString lines;
 
-	@JsonProperty
-	private TrackSegments segments;
+	private List<TrackSegment> segments;
 
 	public Track() {
 		super();
 	}
 
+	public Track(List<TrackSegment> segments) {
+		this();
+		this.setSegments(segments);
+	}
+
 	public Track(TrackSegment segment) {
 		this();
 		this.addSegment(segment);
-	}
-
-	public Track(TrackSegments segments) {
-		this();
-		this.setSegments(segments);
 	}
 
 	public void addSegment(TrackSegment segment) {
@@ -95,6 +94,7 @@ public class Track extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "track_id", insertable = true, nullable = false)
 	@XmlElement(name = "trkseg")
+	@JsonProperty
 	public List<TrackSegment> getSegments() {
 		return segments;
 	}
@@ -115,7 +115,7 @@ public class Track extends AbstractEntity {
 		return segments.get(0).getStartingPoint();
 	}
 
-	public void setSegments(TrackSegments segments) {
+	public void setSegments(List<TrackSegment> segments) {
 		this.segments = segments;
 	}
 

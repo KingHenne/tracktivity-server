@@ -27,14 +27,13 @@ public class TrackSegment extends AbstractEntity {
 
 	private LineString line;
 
-	@JsonProperty
-	private TrackPoints points;
+	private List<TrackPoint> points;
 
 	public TrackSegment() {
 		super();
 	}
 
-	public TrackSegment(TrackPoints points) {
+	public TrackSegment(List<TrackPoint> points) {
 		this();
 		this.setPoints(points);
 	}
@@ -74,6 +73,7 @@ public class TrackSegment extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "segment_id", insertable = true, nullable = false)
 	@XmlElement(name = "trkpt")
+	@JsonProperty
 	public List<TrackPoint> getPoints() {
 		return points;
 	}
@@ -94,7 +94,7 @@ public class TrackSegment extends AbstractEntity {
 		return points.get(0);
 	}
 
-	public void setPoints(TrackPoints points) {
+	public void setPoints(List<TrackPoint> points) {
 		this.points = points;
 	}
 

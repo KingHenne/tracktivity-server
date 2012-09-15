@@ -1,6 +1,8 @@
 package de.hliebau.tracktivity.service;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -16,7 +18,6 @@ import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.TrackPoint;
-import de.hliebau.tracktivity.domain.TrackPoints;
 import de.hliebau.tracktivity.domain.TrackSegment;
 import de.hliebau.tracktivity.domain.User;
 
@@ -65,7 +66,7 @@ public class ActivityServiceTest {
 
 	@Test
 	public void testAddNewTrack() {
-		TrackPoints points = new TrackPoints(3);
+		List<TrackPoint> points = new ArrayList<TrackPoint>(3);
 		points.add(new TrackPoint(10.0, 20.0, 0.0));
 		points.add(new TrackPoint(15.0, 25.0, 50.0));
 		points.add(new TrackPoint(12.0, 22.0, 45.0));
