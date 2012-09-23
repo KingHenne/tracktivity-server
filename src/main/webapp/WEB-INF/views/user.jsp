@@ -8,6 +8,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Tracktivity - ${username}</title>
+
+<!-- Mobile viewport optimized: j.mp/bplateviewport -->
+<meta name="viewport" content="width=device-width, minimum-scale=1.0 maximum-scale=1.0 initial-scale=1.0" />
+
 <link rel="stylesheet" href="/css/normalize.css" type="text/css" />
 <link rel="stylesheet" href="/css/style.css" type="text/css" />
 </head>
