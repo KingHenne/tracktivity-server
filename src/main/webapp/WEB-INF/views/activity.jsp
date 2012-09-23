@@ -28,13 +28,13 @@
 		<h1><c:out value="${empty activity.name ? activityDate : activity.name}" /></h1>
 		<dl class="activityData">
 			<dt>Created by:</dt>
-			<dd><a href="${userUrl}">${activity.user.username}</a></dd>
+			<dd><a href="${userUrl}">${activity.user.fullname}</a></dd>
 		<c:if test="${not empty activity.type}">
 			<dt>Activity type:</dt>
 			<dd>${activity.type.label}</dd>
 		</c:if>
 			<dt>Duration:</dt>
-			<dd>${durationNetto} (${durationBrutto})</dd>
+			<dd>${durationNetto} (${durationBrutto} incl. breaks)</dd>
 			<dt>Distance:</dt>
 			<dd><fmt:formatNumber maxFractionDigits="2" value="${activity.track.lengthInMeters / 1000}" /> km</dd>
 		</dl>
