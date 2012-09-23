@@ -18,8 +18,10 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
 
+import de.hliebau.tracktivity.api.JsonDateSerializer;
 import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
@@ -84,6 +86,7 @@ public class TrackPoint extends AbstractEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@XmlElement(name = "time")
 	@JsonProperty("time")
+	@JsonSerialize(using = JsonDateSerializer.class)
 	public Date getUtcTime() {
 		return utcTime;
 	}
