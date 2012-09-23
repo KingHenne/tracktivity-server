@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -72,6 +73,11 @@ public class User extends AbstractEntity {
 	@JsonProperty
 	public String getFirstname() {
 		return firstname;
+	}
+
+	@Transient
+	public String getFullname() {
+		return firstname + " " + lastname;
 	}
 
 	@XmlElement
