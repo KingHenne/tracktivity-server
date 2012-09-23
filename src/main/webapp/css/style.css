@@ -1,11 +1,42 @@
 body {
 	margin: 10px;
+	font-size: 15px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1 {
+	font-size: 1.5em;
+	margin: 0 0 0.5em 0;
+	line-height: 1.2em;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 form .error {
 	display: block;
 	color: #d20;
 	font-size: 0.77em;
+}
+
+dl.activityData {
+	margin: 0.5em 0;
+}
+
+dl.activityData dt {
+	
+}
+
+dl.activityData dd {
+	margin: 0 0 0 1em;
+	font-weight: bold;
+}
+
+ul {
+	padding-left: 1.3em;
+}
+
+ul li {
+	
 }
 
 #map {

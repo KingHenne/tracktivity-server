@@ -6,8 +6,12 @@ import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
 @MappedSuperclass
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public abstract class AbstractEntity {
 
 	private Long id;

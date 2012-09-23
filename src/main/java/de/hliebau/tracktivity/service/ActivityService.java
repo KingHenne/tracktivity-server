@@ -14,6 +14,8 @@ public interface ActivityService {
 
 	public void createTrack(Track track);
 
+	public void deleteActivity(Activity activity);
+
 	public String exportActivityAsGpx(Activity activity);
 
 	public long getActivityCount();

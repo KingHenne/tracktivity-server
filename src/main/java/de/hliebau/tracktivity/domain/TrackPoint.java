@@ -1,5 +1,6 @@
 package de.hliebau.tracktivity.domain;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -13,12 +14,19 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
 
+import de.hliebau.tracktivity.api.JsonDateSerializer;
 import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class TrackPoint extends AbstractEntity {
 
 	private Point point;
@@ -39,8 +47,16 @@ public class TrackPoint extends AbstractEntity {
 		this.point = GeometryUtils.getInstance().createPoint(lon, lat, ele);
 	}
 
+	@JsonCreator
+	public TrackPoint(@JsonProperty("lon") double lon, @JsonProperty("lat") double lat,
+			@JsonProperty("ele") double ele, @JsonProperty("time") Date utcTime) {
+		this(lon, lat, ele);
+		this.utcTime = utcTime;
+	}
+
 	@Transient
 	@XmlElement(name = "ele")
+	@JsonProperty("ele")
 	public Double getElevation() {
 		if (!Double.isNaN(this.point.getCoordinate().z)) {
 			return point.getCoordinate().z;
@@ -50,12 +66,14 @@ public class TrackPoint extends AbstractEntity {
 
 	@Transient
 	@XmlAttribute(name = "lat")
+	@JsonProperty("lat")
 	public double getLatitude() {
 		return point.getY();
 	}
 
 	@Transient
 	@XmlAttribute(name = "lon")
+	@JsonProperty("lon")
 	public double getLongitude() {
 		return point.getX();
 	}
@@ -67,6 +85,8 @@ public class TrackPoint extends AbstractEntity {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@XmlElement(name = "time")
+	@JsonProperty("time")
+	@JsonSerialize(using = JsonDateSerializer.class)
 	public Date getUtcTime() {
 		return utcTime;
 	}
@@ -79,4 +99,18 @@ public class TrackPoint extends AbstractEntity {
 		this.utcTime = utcTime;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("[%.3f, %.3f", getLatitude(), getLongitude()));
+		Double ele = getElevation();
+		if (ele != null) {
+			sb.append(String.format(", %.2f", ele));
+		}
+		sb.append(']');
+		if (utcTime != null) {
+			sb.append(" @ ").append(DateFormat.getInstance().format(utcTime));
+		}
+		return sb.toString();
+	}
 }

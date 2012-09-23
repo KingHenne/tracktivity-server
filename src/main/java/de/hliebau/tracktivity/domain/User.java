@@ -9,14 +9,23 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "TracktivityUser")
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class User extends AbstractEntity {
 
 	private List<Activity> activities = new ArrayList<Activity>();
@@ -50,29 +59,40 @@ public class User extends AbstractEntity {
 		activities.remove(activity);
 	}
 
+	public boolean equals(User user) {
+		return user.getId() == this.getId();
+	}
+
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
-	// @XmlElementWrapper(name = "activities")
-	// @XmlElement(name = "activity")
-	@XmlTransient
 	public List<Activity> getActivities() {
 		return activities;
 	}
 
+	@XmlElement
+	@JsonProperty
 	public String getFirstname() {
 		return firstname;
 	}
 
+	@Transient
+	public String getFullname() {
+		return firstname + " " + lastname;
+	}
+
+	@XmlElement
+	@JsonProperty
 	public String getLastname() {
 		return lastname;
 	}
 
-	@XmlTransient
 	public String getPassword() {
 		return password;
 	}
 
 	@Column(unique = true)
+	@XmlElement
+	@JsonProperty
 	public String getUsername() {
 		return username;
 	}

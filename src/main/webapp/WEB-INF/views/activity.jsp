@@ -28,13 +28,13 @@
 		<h1><c:out value="${empty activity.name ? activityDate : activity.name}" /></h1>
 		<dl class="activityData">
 			<dt>Created by:</dt>
-			<dd><a href="${userUrl}">${activity.user.username}</a></dd>
+			<dd><a href="${userUrl}">${activity.user.fullname}</a></dd>
 		<c:if test="${not empty activity.type}">
 			<dt>Activity type:</dt>
 			<dd>${activity.type.label}</dd>
 		</c:if>
 			<dt>Duration:</dt>
-			<dd>${durationNetto} (${durationBrutto})</dd>
+			<dd>${durationNetto} (${durationBrutto} incl. breaks)</dd>
 			<dt>Distance:</dt>
 			<dd><fmt:formatNumber maxFractionDigits="2" value="${activity.track.lengthInMeters / 1000}" /> km</dd>
 		</dl>
@@ -54,7 +54,7 @@
 		key: '6eac6d67cf3f4fa8a18bbf5bec747cdc',
 		styleId: 70963,
 	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
-	    maxZoom: 17,
+	    maxZoom: 18,
 	    detectRetina: true
 	}).addTo(map);
 	

@@ -61,7 +61,7 @@ public class UserController {
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
-		return "redirect:user/" + user.getUsername();
+		return "redirect:users/" + user.getUsername();
 	}
 
 }

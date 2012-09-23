@@ -1,0 +1,24 @@
+{
+	"name" : "Test Activity",
+	"type" : "CYCLING",
+	"track" : {
+		"segments" : [
+			{
+				"points" : [
+					{
+						"lat" : 22.9,
+						"lon" : 42.8,
+						"ele" : 8.2,
+						"time" : "2011-08-13T17:22:40Z"
+					},
+					{
+						"lat" : 23.5,
+						"lon" : 42,
+						"ele" : 12.1,
+						"time" : "2011-08-13T17:22:52Z"
+					}
+				]
+			}
+		]
+	}
+}

@@ -40,6 +40,12 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
+	@Transactional
+	public void deleteActivity(Activity activity) {
+		activityDao.delete(activityDao.findById(activity.getId()));
+	}
+
+	@Override
 	public String exportActivityAsGpx(Activity activity) {
 		return gpxParser.exportActivity(activity);
 	}

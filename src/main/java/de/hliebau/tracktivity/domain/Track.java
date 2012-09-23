@@ -1,6 +1,5 @@
 package de.hliebau.tracktivity.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,6 +13,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiLineString;
 
@@ -21,11 +23,12 @@ import de.hliebau.tracktivity.util.GeometryUtils;
 
 @Entity
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(getterVisibility = Visibility.NONE)
 public class Track extends AbstractEntity {
 
 	private MultiLineString lines;
 
-	private List<TrackSegment> segments = new ArrayList<TrackSegment>();
+	private List<TrackSegment> segments;
 
 	public Track() {
 		super();
@@ -91,6 +94,7 @@ public class Track extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "track_id", insertable = true, nullable = false)
 	@XmlElement(name = "trkseg")
+	@JsonProperty
 	public List<TrackSegment> getSegments() {
 		return segments;
 	}
