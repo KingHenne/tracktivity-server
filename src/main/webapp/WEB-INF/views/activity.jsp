@@ -54,7 +54,7 @@
 		key: '6eac6d67cf3f4fa8a18bbf5bec747cdc',
 		styleId: 70963,
 	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
-	    maxZoom: 17,
+	    maxZoom: 18,
 	    detectRetina: true
 	}).addTo(map);
 	
