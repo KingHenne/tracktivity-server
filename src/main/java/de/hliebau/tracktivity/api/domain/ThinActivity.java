@@ -26,8 +26,8 @@ public class ThinActivity {
 	// }
 
 	@XmlAttribute
-	public Long getId() {
-		return activity.getId();
+	public String getId() {
+		return activity.getId().toString();
 	}
 
 	// @XmlElement
