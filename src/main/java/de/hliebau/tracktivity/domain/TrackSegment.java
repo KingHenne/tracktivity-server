@@ -1,5 +1,6 @@
 package de.hliebau.tracktivity.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,7 +28,7 @@ public class TrackSegment extends AbstractEntity {
 
 	private LineString line;
 
-	private List<TrackPoint> points;
+	private List<TrackPoint> points = new ArrayList<TrackPoint>();
 
 	public TrackSegment() {
 		super();
