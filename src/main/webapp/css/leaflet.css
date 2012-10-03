@@ -377,3 +377,15 @@
 .leaflet-popup-content {
 	font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
+
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.leaflet-control-zoom-in {
+		background-image: url(images/zoom-in@2x.png);
+		background-size: 9px 9px;
+	}
+	.leaflet-control-zoom-out {
+		background-image: url(images/zoom-out@2x.png);
+		background-size: 9px 9px;
+	}
+}
