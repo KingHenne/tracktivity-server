@@ -39,6 +39,7 @@ public class Activity extends AbstractEntity {
 	@JsonProperty
 	private String name;
 
+	@JsonProperty
 	private Track track;
 
 	@JsonProperty
