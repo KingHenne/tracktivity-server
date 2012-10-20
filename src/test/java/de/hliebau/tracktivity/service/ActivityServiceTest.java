@@ -6,6 +6,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.TrackPoint;
 import de.hliebau.tracktivity.domain.TrackSegment;
 import de.hliebau.tracktivity.domain.User;
+import de.hliebau.tracktivity.util.GeometryUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/application.xml" })
@@ -51,7 +53,7 @@ public class ActivityServiceTest {
 	}
 
 	@Test
-	@Rollback(value = false)
+	@Ignore
 	public void importMultipleTracks() {
 		InputStream gpxFile = this.getClass().getResourceAsStream("/track.gpx");
 		User testUser = getPersistentTestUser();
@@ -84,6 +86,7 @@ public class ActivityServiceTest {
 	}
 
 	@Test
+	@Ignore
 	public void testDatabaseFetchingPerformance() {
 		long start = System.currentTimeMillis();
 		Track track = activityService.getRecentTracks(1).get(0);
@@ -124,7 +127,38 @@ public class ActivityServiceTest {
 		long end = System.currentTimeMillis();
 		long millis = end - start;
 		Assert.assertTrue("length was 0", length > 0);
-		Assert.assertTrue(String.format("calculation took way too long: %d ms", millis), millis < 50);
+		Assert.assertTrue(String.format("calculation took way too long: %d ms", millis), millis < 100);
 	}
 
+	@Test
+	public void testRetrieveActivityWithTrack() {
+		Activity activity = activityService.retrieveActivityWithTrack(285972L);
+		Assert.assertNotNull(activity);
+		Track track = activity.getTrack();
+		int pointsCount = track.getPointsCount();
+		List<TrackPoint> points = new ArrayList<TrackPoint>(pointsCount);
+		for (TrackSegment s : track.getSegments()) {
+			List<TrackPoint> segmentPoints = s.getPoints();
+			points.addAll(segmentPoints);
+			for (int i = 0; i < segmentPoints.size() - 1; i++) {
+				TrackPoint p1 = segmentPoints.get(i);
+				TrackPoint p2 = segmentPoints.get(i + 1);
+				double d = GeometryUtils.getInstance().getDistance(p1, p2);
+				Assert.assertTrue(
+						String.format("A distance of %.2fm between two points of the same segment seems too high.", d),
+						d < 50.0);
+			}
+		}
+		Assert.assertEquals(pointsCount, points.size());
+		for (int i = 0; i < pointsCount - 1; i++) {
+			TrackPoint p1 = points.get(i);
+			TrackPoint p2 = points.get(i + 1);
+			System.out.println(p1);
+			boolean before = p1.getUtcTime().before(p2.getUtcTime());
+			boolean atTheSameTime = p1.getUtcTime().equals(p2.getUtcTime());
+			Assert.assertTrue(p2.toString(), before || atTheSameTime);
+			double d = GeometryUtils.getInstance().getDistance(p1, p2);
+			Assert.assertTrue(String.format("A distance of %.2fm between two points seems too high.", d), d < 100.0);
+		}
+	}
 }
