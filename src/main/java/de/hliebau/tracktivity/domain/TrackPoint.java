@@ -102,14 +102,15 @@ public class TrackPoint extends AbstractEntity {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("[%.3f, %.3f", getLatitude(), getLongitude()));
+		sb.append(String.format("[%.5f, %.5f", getLatitude(), getLongitude()));
 		Double ele = getElevation();
 		if (ele != null) {
-			sb.append(String.format(", %.2f", ele));
+			sb.append(String.format(", %.1f", ele));
 		}
 		sb.append(']');
 		if (utcTime != null) {
-			sb.append(" @ ").append(DateFormat.getInstance().format(utcTime));
+			DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG);
+			sb.append(" @ ").append(df.format(utcTime));
 		}
 		return sb.toString();
 	}
