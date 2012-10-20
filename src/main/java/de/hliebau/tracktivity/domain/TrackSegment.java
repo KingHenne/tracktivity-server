@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
@@ -73,6 +74,7 @@ public class TrackSegment extends AbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "segment_id", insertable = true, nullable = false)
+	@OrderBy("utcTime ASC, id")
 	@XmlElement(name = "trkpt")
 	@JsonProperty
 	public List<TrackPoint> getPoints() {
