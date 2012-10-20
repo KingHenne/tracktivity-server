@@ -29,7 +29,7 @@ public class UserServiceTest {
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	private final String testUsername = "testUser";
+	private final String testUsername = "testUserY";
 
 	@Autowired
 	private UserService userService;

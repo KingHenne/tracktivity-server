@@ -26,7 +26,7 @@ public class ActivityDaoTest {
 	private UserService userService;
 
 	protected User createTestUser() {
-		User newUser = new User("testUser");
+		User newUser = new User("testUserX");
 		userService.createUser(newUser);
 		return newUser;
 	}
