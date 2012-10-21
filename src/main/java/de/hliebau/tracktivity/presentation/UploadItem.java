@@ -14,6 +14,10 @@ public class UploadItem {
 		return activityType;
 	}
 
+	public ActivityType[] getActivityTypes() {
+		return ActivityType.values();
+	}
+
 	public CommonsMultipartFile getFileData() {
 		return fileData;
 	}

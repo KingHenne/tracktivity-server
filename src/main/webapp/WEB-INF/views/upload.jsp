@@ -18,7 +18,7 @@
 	<sf:errors path="fileData" element="p" cssClass="error" />
 	<p>
 		<label for="activityTypes">Activity type:</label><br/>
-		<sf:select path="activityType" id="activityTypes" items="${activityTypes}" itemLabel="label" />
+		<sf:select path="activityType" id="activityTypes" items="${uploadItem.activityTypes}" itemLabel="label" />
 	</p>
 	<p>
 		<label for="fileData">GPX File:</label><br/>

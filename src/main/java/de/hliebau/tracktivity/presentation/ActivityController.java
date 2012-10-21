@@ -47,7 +47,6 @@ public class ActivityController {
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String uploadActivity(Model model) {
 		model.addAttribute(new UploadItem());
-		model.addAttribute("activityTypes", ActivityType.values());
 		return "upload";
 	}
 
