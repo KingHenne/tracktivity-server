@@ -117,6 +117,7 @@ public class ActivityServiceTest {
 		Assert.assertNotNull(exportedGpx);
 	}
 
+	@Ignore
 	@Test
 	public void testLengthCalculationPerformance() {
 		Track track = activityService.getRecentTracks(1).get(0);
