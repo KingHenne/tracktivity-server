@@ -33,7 +33,7 @@ public class ActivityController {
 	private UserService userService;
 
 	@RequestMapping(value = "/{activityId}", method = RequestMethod.GET)
-	public String displayActivty(@PathVariable Long activityId, Model model) {
+	public String displayActivity(@PathVariable Long activityId, Model model) {
 		Activity activity = activityService.retrieveActivityWithTrack(activityId);
 		if (activity != null) {
 			model.addAttribute(activity);
