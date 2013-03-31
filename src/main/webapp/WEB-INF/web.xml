@@ -23,6 +23,11 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<!-- Map all requests starting with "/app/" to the app DispatcherServlet for handling -->
+	<servlet-mapping>
+		<servlet-name>tracktivity-app</servlet-name>
+		<url-pattern>/app/*</url-pattern>
+	</servlet-mapping>
 	
 	<!-- The front controller of the Spring Web application, responsible for handling all API requests. -->
 	<servlet>
@@ -30,17 +35,21 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
-
-	<!-- Map all requests starting with "/app/" to the app DispatcherServlet for handling -->
-	<servlet-mapping>
-		<servlet-name>tracktivity-app</servlet-name>
-		<url-pattern>/app/*</url-pattern>
-	</servlet-mapping>
-
 	<!-- Map all requests starting with "/api/" to the API DispatcherServlet for handling -->
 	<servlet-mapping>
 		<servlet-name>tracktivity-api</servlet-name>
 		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- WebSocket servlet for live tracking -->
+	<servlet>
+		<servlet-name>live</servlet-name>
+		<servlet-class>de.hliebau.tracktivity.live.LiveWebSocketServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>live</servlet-name>
+		<url-pattern>/live</url-pattern>
 	</servlet-mapping>
 	
 	<filter>
