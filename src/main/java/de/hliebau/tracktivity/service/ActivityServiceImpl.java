@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.hliebau.tracktivity.domain.Activity;
@@ -14,6 +15,8 @@ import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.persistence.ActivityDao;
 import de.hliebau.tracktivity.persistence.TrackDao;
 import de.hliebau.tracktivity.util.GpxParser;
+import de.hliebau.tracktivity.util.TcxParser;
+import de.hliebau.tracktivity.util.XmlParser;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -23,6 +26,9 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Autowired
 	private GpxParser gpxParser;
+
+	@Autowired
+	private TcxParser tcxParser;
 
 	@Autowired
 	private TrackDao trackDao;
@@ -82,7 +88,18 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	@Transactional
 	public Activity importGpxAsUserActivity(InputStream in, User user, ActivityType type) {
-		Activity activity = gpxParser.createActivity(in);
+		return parseActivity(gpxParser, in, user, type);
+	}
+
+	@Override
+	@Transactional
+	public Activity importTcxAsUserActivity(InputStream in, User user, ActivityType type) {
+		return parseActivity(tcxParser, in, user, type);
+	}
+
+	@Transactional(propagation = Propagation.NESTED)
+	private Activity parseActivity(XmlParser parser, InputStream in, User user, ActivityType type) {
+		Activity activity = parser.createActivity(in);
 		if (activity != null) {
 			activity.setUser(user);
 			activity.setType(type);

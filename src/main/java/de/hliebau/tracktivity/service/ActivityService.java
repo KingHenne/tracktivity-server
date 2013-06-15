@@ -30,6 +30,8 @@ public interface ActivityService {
 
 	public Activity importGpxAsUserActivity(InputStream in, User user, ActivityType type);
 
+	public Activity importTcxAsUserActivity(InputStream in, User user, ActivityType type);
+
 	public Activity retrieveActivity(Long id);
 
 	public Activity retrieveActivityWithTrack(Long id);

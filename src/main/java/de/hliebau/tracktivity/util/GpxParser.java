@@ -1,18 +1,12 @@
 package de.hliebau.tracktivity.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TimeZone;
 
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
@@ -20,94 +14,13 @@ import javax.xml.stream.XMLStreamWriter;
 import org.springframework.stereotype.Service;
 
 import de.hliebau.tracktivity.domain.Activity;
-import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.TrackPoint;
 import de.hliebau.tracktivity.domain.TrackSegment;
 
 @Service
-public class GpxParser {
+public class GpxParser extends XmlParser {
 
-	private final XMLInputFactory inputFactory;
-
-	private final XMLOutputFactory outputFactory;
-
-	public GpxParser() {
-		inputFactory = XMLInputFactory.newInstance();
-		outputFactory = XMLOutputFactory.newInstance();
-	}
-
-	public Activity createActivity(InputStream in) {
-		Activity activity = new Activity(new Track());
-		TrackPoint currentPoint = null;
-		TrackSegment currentSegment = null;
-
-		Set<String> inElement = new HashSet<String>(20);
-
-		try {
-			XMLStreamReader r = inputFactory.createXMLStreamReader(in);
-			for (int event = r.next(); event != XMLStreamConstants.END_DOCUMENT; event = r.next()) {
-				switch (event) {
-				case XMLStreamConstants.START_ELEMENT:
-					String startElementName = r.getLocalName().toLowerCase();
-					inElement.add(startElementName);
-					if (startElementName.equals("trkseg")) {
-						currentSegment = new TrackSegment();
-					} else if (startElementName.equals("trkpt")) {
-						double lon = Double.parseDouble(r.getAttributeValue(null, "lon"));
-						double lat = Double.parseDouble(r.getAttributeValue(null, "lat"));
-						currentPoint = new TrackPoint(lon, lat);
-					}
-					break;
-				case XMLStreamConstants.END_ELEMENT:
-					String endElementName = r.getLocalName().toLowerCase();
-					inElement.remove(endElementName);
-					if (endElementName.equals("trk")) {
-						Date date = activity.getTrack().getStartingPoint().getUtcTime();
-						if (date != null) {
-							activity.setCreated(date);
-						} else {
-							activity.setCreated(new Date());
-						}
-					} else if (endElementName.equals("trkseg")) {
-						activity.getTrack().addSegment(currentSegment);
-						currentSegment = null;
-					} else if (endElementName.equals("trkpt")) {
-						currentSegment.addPoint(currentPoint);
-						currentPoint = null;
-					}
-					break;
-				case XMLStreamConstants.CHARACTERS:
-					if (inElement.contains("trk")) {
-						if (inElement.contains("name")) {
-							activity.setName(r.getText());
-						} else if (inElement.contains("trkseg") && inElement.contains("trkpt")) {
-							if (inElement.contains("ele")) {
-								double ele = Double.parseDouble(r.getText());
-								double lon = currentPoint.getPoint().getX();
-								double lat = currentPoint.getPoint().getY();
-								currentPoint = new TrackPoint(lon, lat, ele);
-							} else if (inElement.contains("time")) {
-								Calendar cal = DatatypeConverter.parseDateTime(r.getText());
-								currentPoint.setUtcTime(cal.getTime());
-							}
-						}
-					}
-					break;
-				case XMLStreamConstants.CDATA:
-					if (inElement.contains("trk") && inElement.contains("name")) {
-						activity.setName(r.getText());
-					}
-					break;
-				}
-			}
-			r.close();
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return activity;
-	}
-
+	@Override
 	public String exportActivity(Activity activity) {
 		OutputStream stream = new ByteArrayOutputStream();
 		try {
@@ -134,6 +47,65 @@ public class GpxParser {
 			return null;
 		}
 		return stream.toString();
+	}
+
+	@Override
+	public void onCdata(XMLStreamReader reader) {
+		if (inElement.contains("trk") && inElement.contains("name")) {
+			currentActivity.setName(reader.getText());
+		}
+	}
+
+	@Override
+	public void onCharacters(XMLStreamReader reader) {
+		if (inElement.contains("trk")) {
+			if (inElement.contains("name")) {
+				currentActivity.setName(reader.getText());
+			} else if (inElement.contains("trkseg") && inElement.contains("trkpt")) {
+				if (inElement.contains("ele")) {
+					double ele = Double.parseDouble(reader.getText());
+					double lon = currentPoint.getLongitude();
+					double lat = currentPoint.getLatitude();
+					updateCurrentPoint(lat, lon, ele);
+				} else if (inElement.contains("time")) {
+					Calendar cal = DatatypeConverter.parseDateTime(reader.getText());
+					currentPoint.setUtcTime(cal.getTime());
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onEndElement(XMLStreamReader reader) {
+		String endElementName = reader.getLocalName().toLowerCase();
+		inElement.remove(endElementName);
+		if (endElementName.equals("trk")) {
+			Date date = currentActivity.getTrack().getStartingPoint().getUtcTime();
+			if (date != null) {
+				currentActivity.setCreated(date);
+			} else {
+				currentActivity.setCreated(new Date());
+			}
+		} else if (endElementName.equals("trkseg")) {
+			currentActivity.getTrack().addSegment(currentSegment);
+			currentSegment = null;
+		} else if (endElementName.equals("trkpt")) {
+			currentSegment.addPoint(currentPoint);
+			currentPoint = null;
+		}
+	}
+
+	@Override
+	public void onStartElement(XMLStreamReader reader) {
+		String startElementName = reader.getLocalName().toLowerCase();
+		inElement.add(startElementName);
+		if (startElementName.equals("trkseg")) {
+			currentSegment = new TrackSegment();
+		} else if (startElementName.equals("trkpt")) {
+			double lon = Double.parseDouble(reader.getAttributeValue(null, "lon"));
+			double lat = Double.parseDouble(reader.getAttributeValue(null, "lat"));
+			currentPoint = new TrackPoint(lon, lat);
+		}
 	}
 
 	private void writePoint(XMLStreamWriter w, TrackPoint p) throws XMLStreamException {

@@ -10,7 +10,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,27 +93,6 @@ public class ActivityServiceTest {
 		long millis = end - start;
 		Assert.assertNotNull(track);
 		Assert.assertTrue(String.format("fetching took way too long: %d ms", millis), millis < 500);
-	}
-
-	@Test
-	@Rollback(true)
-	public void testImportGpx() {
-		InputStream gpxFile = this.getClass().getResourceAsStream("/track.gpx");
-		long countBefore = activityService.getActivityCount();
-		Activity activity = activityService.importGpxAsUserActivity(gpxFile, getPersistentTestUser(),
-				ActivityType.CYCLING);
-		Track track = activity.getTrack();
-		Assert.assertNotNull(activity);
-		Assert.assertNotNull(track);
-		Assert.assertEquals(1181, track.getPointsCount());
-		Assert.assertEquals(35541.0, Math.floor(track.getLengthInMeters()));
-		Assert.assertEquals(1, track.getDuration(false).getHours());
-		Assert.assertEquals("Bergtour 2", activity.getName());
-		Assert.assertEquals("The track count has not been increased by 1.", countBefore + 1,
-				activityService.getActivityCount());
-
-		String exportedGpx = activityService.exportActivityAsGpx(activity);
-		Assert.assertNotNull(exportedGpx);
 	}
 
 	@Ignore
