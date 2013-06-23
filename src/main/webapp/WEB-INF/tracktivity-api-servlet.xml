@@ -15,6 +15,7 @@
 	<!-- Scan the the api package for Spring MVC controllers (i.e. REST services). -->
 	<context:component-scan base-package="de.hliebau.tracktivity.api">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 	
 	<security:global-method-security jsr250-annotations="enabled" />
