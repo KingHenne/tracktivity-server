@@ -59,6 +59,28 @@ public class User extends AbstractEntity {
 		activities.remove(activity);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		User other = (User) obj;
+		if (username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!username.equals(other.username)) {
+			return false;
+		}
+		return true;
+	}
+
 	public boolean equals(User user) {
 		return user.getId() == this.getId();
 	}
@@ -95,6 +117,14 @@ public class User extends AbstractEntity {
 	@JsonProperty
 	public String getUsername() {
 		return username;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
 	}
 
 	public void setActivities(List<Activity> activities) {

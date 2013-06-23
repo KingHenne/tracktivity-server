@@ -49,7 +49,7 @@ public class ActivityRestService {
 		Activity activity = activityService.retrieveActivity(id);
 		if (activity == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		} else if (activity.getUser().equals(authenticatedUser)) {
+		} else if (!activity.getUser().equals(authenticatedUser)) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		} else {
 			activityService.deleteActivity(activity);
