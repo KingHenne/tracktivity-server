@@ -40,6 +40,9 @@ public class Activity extends AbstractEntity {
 	private String name;
 
 	@JsonProperty
+	private boolean recording = false;
+
+	@JsonProperty
 	private Track track;
 
 	@JsonProperty
@@ -95,12 +98,20 @@ public class Activity extends AbstractEntity {
 		return user;
 	}
 
+	public boolean isRecording() {
+		return recording;
+	}
+
 	public void setCreated(Date created) {
 		this.created = created;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setRecording(boolean recording) {
+		this.recording = recording;
 	}
 
 	public void setTrack(Track track) {

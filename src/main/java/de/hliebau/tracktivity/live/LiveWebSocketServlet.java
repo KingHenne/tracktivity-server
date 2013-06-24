@@ -25,7 +25,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.service.ActivityService;
+import de.hliebau.tracktivity.service.UserService;
 
 public class LiveWebSocketServlet extends WebSocketServlet {
 
@@ -35,11 +38,15 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-		private final Principal principal;
+		private final ObjectMapper mapper = new ObjectMapper();
 
-		public ActivityMessageInbound(int id, Principal principal) {
+		private Activity recordingActivity;
+
+		private final User user;
+
+		public ActivityMessageInbound(int id, User user) {
 			this.id = id;
-			this.principal = principal;
+			this.user = user;
 		}
 
 		private void broadcast(String message) {
@@ -53,6 +60,17 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		protected Activity createLiveActivity() {
+			if (this.user == null) {
+				return null;
+			}
+			this.recordingActivity = new Activity();
+			this.recordingActivity.setRecording(true);
+			this.recordingActivity.setUser(user);
+			activityService.createActivity(this.recordingActivity);
+			return this.recordingActivity;
 		}
 
 		@Override
@@ -77,11 +95,21 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 			// TODO: only process messages from logged in users
 			// if (this.principal != null)
 			logger.debug("trying to convert message: {}", textMessage.toString());
-			ObjectMapper mapper = new ObjectMapper();
 			try {
-				WebSocketMessage message = mapper.readValue(textMessage.toString(), WebSocketMessage.class);
+				WebSocketMessage message = this.mapper.readValue(textMessage.toString(), WebSocketMessage.class);
 				// TODO: read and store transmitted tracking info
 				// TODO: broadcast new info to all non-tracking connections
+				if (message.getData().equals("C")) {
+					Activity activity = this.createLiveActivity();
+					String response;
+					if (activity != null) {
+						// private message just for the sender
+						response = "Created new activity with ID: " + activity.getId();
+					} else {
+						response = "Could not create a new activity.";
+					}
+					this.getWsOutbound().writeTextMessage(CharBuffer.wrap(response));
+				}
 				broadcast(message.getData());
 			} catch (JsonParseException e) {
 				e.printStackTrace();
@@ -103,9 +131,17 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 
 	private final Set<ActivityMessageInbound> connections = new CopyOnWriteArraySet<ActivityMessageInbound>();
 
+	@Autowired
+	private UserService userService;
+
 	@Override
 	protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest request) {
-		return new ActivityMessageInbound(connectionIds.incrementAndGet(), request.getUserPrincipal());
+		Principal userPrincipal = request.getUserPrincipal();
+		User user = null;
+		if (userPrincipal != null) {
+			user = userService.retrieveUser(userPrincipal.getName(), false);
+		}
+		return new ActivityMessageInbound(connectionIds.incrementAndGet(), user);
 	}
 
 	@Override

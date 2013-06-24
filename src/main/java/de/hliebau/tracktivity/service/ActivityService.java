@@ -20,6 +20,8 @@ public interface ActivityService {
 
 	public long getActivityCount();
 
+	public List<Activity> getLiveActivities();
+
 	public List<Activity> getRecentActivities(int count);
 
 	public List<Track> getRecentTracks(int count);

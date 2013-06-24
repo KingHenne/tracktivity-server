@@ -63,6 +63,12 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<Activity> getLiveActivities() {
+		return activityDao.getLiveActivities();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<Activity> getRecentActivities(int count) {
 		return activityDao.getRecentActivities(count);
 	}

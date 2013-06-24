@@ -35,7 +35,7 @@ Chat.initialize = function() {
 	if (window.location.protocol == 'http:') {
 		Chat.connect('ws://' + window.location.host + '/live');
 	} else {
-		Chat.connect('wss://' + window.location.host + '/live');
+		Chat.connect('wss://hendrik:123456@' + window.location.host + '/live');
 	}
 };
 

@@ -7,6 +7,8 @@ import de.hliebau.tracktivity.domain.User;
 
 public interface ActivityDao extends CommonDao<Activity> {
 
+	public List<Activity> getLiveActivities();
+
 	public List<Activity> getRecentActivities(int count);
 
 	public List<Activity> getUserActivities(User user);
