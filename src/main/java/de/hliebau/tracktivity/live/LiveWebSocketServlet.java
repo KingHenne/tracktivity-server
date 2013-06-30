@@ -26,6 +26,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.Track;
+import de.hliebau.tracktivity.domain.TrackPoint;
+import de.hliebau.tracktivity.domain.TrackSegment;
 import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.service.ActivityService;
 import de.hliebau.tracktivity.service.UserService;
@@ -41,6 +44,8 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 		private final ObjectMapper mapper = new ObjectMapper();
 
 		private Activity recordingActivity;
+
+		private boolean recordingPaused = false;
 
 		private final User user;
 
@@ -63,10 +68,7 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 		}
 
 		protected Activity createLiveActivity() {
-			if (this.user == null) {
-				return null;
-			}
-			this.recordingActivity = new Activity();
+			this.recordingActivity = new Activity(new Track(new TrackSegment()));
 			this.recordingActivity.setRecording(true);
 			this.recordingActivity.setUser(user);
 			activityService.createActivity(this.recordingActivity);
@@ -91,33 +93,42 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 		}
 
 		@Override
-		protected void onTextMessage(CharBuffer textMessage) {
-			// TODO: only process messages from logged in users
-			// if (this.principal != null)
-			logger.debug("trying to convert message: {}", textMessage.toString());
-			try {
-				WebSocketMessage message = this.mapper.readValue(textMessage.toString(), WebSocketMessage.class);
-				// TODO: read and store transmitted tracking info
-				// TODO: broadcast new info to all non-tracking connections
-				if (message.getData().equals("C")) {
-					Activity activity = this.createLiveActivity();
-					String response;
-					if (activity != null) {
-						// private message just for the sender
-						response = "Created new activity with ID: " + activity.getId();
-					} else {
-						response = "Could not create a new activity.";
-					}
+		protected void onTextMessage(CharBuffer textMessage) throws JsonParseException, JsonMappingException,
+				IOException {
+			if (this.user == null) {
+				logger.warn("received a message from an unauthorized user");
+				return;
+			}
+			logger.debug("received message from {}: {}", this.user.getUsername(), textMessage.toString());
+			WebSocketMessage message = this.mapper.readValue(textMessage.toString(), WebSocketMessage.class);
+			switch (message.getEvent()) {
+			case RECORDING:
+				if (this.recordingActivity == null) {
+					// create a new activity and return the ID to the sender
+					long activityId = this.createLiveActivity().getId();
+					String response = String.format("{ id: %d }", activityId);
 					this.getWsOutbound().writeTextMessage(CharBuffer.wrap(response));
 				}
-				broadcast(message.getData());
-			} catch (JsonParseException e) {
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				TrackPoint newPoint = message.getPoint();
+				if (this.recordingPaused) {
+					// create a new segment after a pause
+					this.recordingPaused = false;
+					this.recordingActivity.getTrack().addSegment(new TrackSegment());
+				}
+				// finally add the recorded point and persist the update
+				this.recordingActivity.addPoint(newPoint);
+				activityService.updateActivity(this.recordingActivity);
+				break;
+			case PAUSED:
+				this.recordingPaused = true;
+				break;
+			case FINISHED:
+				this.recordingActivity.setRecording(false);
+				activityService.updateActivity(this.recordingActivity);
+				this.recordingActivity = null;
+				break;
 			}
+			// broadcast(message.getPoint().toString());
 		}
 
 	}

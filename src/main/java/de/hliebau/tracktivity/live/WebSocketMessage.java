@@ -1,15 +1,27 @@
 package de.hliebau.tracktivity.live;
 
+import de.hliebau.tracktivity.domain.TrackPoint;
+
 public class WebSocketMessage {
 
-	private String data;
+	private EventType event;
 
-	public String getData() {
-		return data;
+	private TrackPoint point;
+
+	public EventType getEvent() {
+		return event;
 	}
 
-	public void setData(String data) {
-		this.data = data;
+	public TrackPoint getPoint() {
+		return point;
+	}
+
+	public void setEvent(EventType event) {
+		this.event = event;
+	}
+
+	public void setPoint(TrackPoint point) {
+		this.point = point;
 	}
 
 }

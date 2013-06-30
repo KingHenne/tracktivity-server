@@ -130,4 +130,10 @@ public class ActivityServiceImpl implements ActivityService {
 		return activity;
 	}
 
+	@Override
+	@Transactional
+	public void updateActivity(Activity activity) {
+		activityDao.update(activity);
+	}
+
 }

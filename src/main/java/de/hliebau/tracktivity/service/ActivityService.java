@@ -38,4 +38,6 @@ public interface ActivityService {
 
 	public Activity retrieveActivityWithTrack(Long id);
 
+	public void updateActivity(Activity activity);
+
 }

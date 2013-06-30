@@ -1,6 +1,7 @@
 package de.hliebau.tracktivity.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -59,6 +60,12 @@ public class Activity extends AbstractEntity {
 
 	public Activity(Track track) {
 		this.track = track;
+	}
+
+	public void addPoint(TrackPoint point) {
+		List<TrackSegment> segments = track.getSegments();
+		TrackSegment currentSegment = segments.get(segments.size() - 1);
+		currentSegment.addPoint(point);
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

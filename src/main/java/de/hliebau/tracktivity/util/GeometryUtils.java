@@ -70,6 +70,11 @@ public class GeometryUtils {
 	}
 
 	public LineString createLineString(List<TrackPoint> points) {
+		if (points.size() < 2) {
+			// A proper line string must have at least 2 points.
+			// Create an empty line string otherwise.
+			return geometryFactory.createLineString(new Coordinate[0]);
+		}
 		Coordinate[] coordinates = new Coordinate[points.size()];
 		for (int i = 0; i < coordinates.length; i++) {
 			coordinates[i] = points.get(i).getPoint().getCoordinate();
