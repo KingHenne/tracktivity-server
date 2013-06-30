@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.hliebau.tracktivity.domain.Activity;
+import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.TrackPoint;
 import de.hliebau.tracktivity.domain.TrackSegment;
@@ -54,23 +55,26 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 			this.user = user;
 		}
 
-		private void broadcast(String message) {
+		private void broadcast(String message, boolean includeSender) {
 			for (ActivityMessageInbound connection : connections) {
+				if (connection.equals(this) && !includeSender) {
+					continue;
+				}
 				try {
 					logger.debug("broadcasting message from {} to {}: {}", id, connection.id, message);
 					CharBuffer buffer = CharBuffer.wrap(message);
 					connection.getWsOutbound().writeTextMessage(buffer);
 				} catch (IOException e) {
-					// Ignore
-					e.printStackTrace();
+					logger.warn("Could not broadcast message from {} to {}.", id, connection.id);
 				}
 			}
 		}
 
-		protected Activity createLiveActivity() {
+		protected Activity createLiveActivity(ActivityType type) {
 			this.recordingActivity = new Activity(new Track(new TrackSegment()));
 			this.recordingActivity.setRecording(true);
 			this.recordingActivity.setUser(user);
+			this.recordingActivity.setType(type);
 			activityService.createActivity(this.recordingActivity);
 			return this.recordingActivity;
 		}
@@ -99,16 +103,18 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 				logger.warn("received a message from an unauthorized user");
 				return;
 			}
+
 			logger.debug("received message from {}: {}", this.user.getUsername(), textMessage.toString());
 			WebSocketMessage message = this.mapper.readValue(textMessage.toString(), WebSocketMessage.class);
+
 			switch (message.getEvent()) {
+			case STARTED:
+				// create a new activity and return the ID to the sender
+				long activityId = this.createLiveActivity(message.getActivityType()).getId();
+				String response = String.format("{ id: %d }", activityId);
+				this.getWsOutbound().writeTextMessage(CharBuffer.wrap(response));
+				break;
 			case RECORDING:
-				if (this.recordingActivity == null) {
-					// create a new activity and return the ID to the sender
-					long activityId = this.createLiveActivity().getId();
-					String response = String.format("{ id: %d }", activityId);
-					this.getWsOutbound().writeTextMessage(CharBuffer.wrap(response));
-				}
 				TrackPoint newPoint = message.getPoint();
 				if (this.recordingPaused) {
 					// create a new segment after a pause
@@ -128,7 +134,9 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 				this.recordingActivity = null;
 				break;
 			}
-			// broadcast(message.getPoint().toString());
+
+			// broadcast the incoming message to all listening connections
+			broadcast(textMessage.toString(), false);
 		}
 
 	}
