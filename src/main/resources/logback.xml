@@ -8,11 +8,11 @@
 		</encoder>
 	</appender>
 	
-	<logger name="org.hibernate" level="ERROR" />
-<!-- 	<logger name="org.hibernate.type" level="FINE" /> -->
-<!-- 	<logger name="org.springframework.security" level="DEBUG" /> -->
-	<logger name="org.springframework" level="DEBUG" />
-	<logger name="com.fasterxml.jackson" level="DEBUG" />
+	<logger name="org.hibernate" level="WARN" />
+	<logger name="org.hibernate.type" level="WARN" />
+	<logger name="org.springframework.security" level="WARN" />
+	<logger name="org.springframework" level="WARN" />
+	<logger name="com.fasterxml.jackson" level="WARN" />
 	<logger name="de.hliebau.tracktivity" level="DEBUG" />
 
 	<root level="INFO">
