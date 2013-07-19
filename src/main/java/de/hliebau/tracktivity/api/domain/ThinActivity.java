@@ -1,6 +1,9 @@
 package de.hliebau.tracktivity.api.domain;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -20,20 +23,20 @@ public class ThinActivity {
 		this.activity = activity;
 	}
 
-	// @XmlElement
-	// public Date getCreated() {
-	// return activity.getCreated();
-	// }
+	@XmlElement
+	public Date getCreated() {
+		return activity.getCreated();
+	}
 
 	@XmlAttribute
 	public String getId() {
 		return activity.getId().toString();
 	}
 
-	// @XmlElement
-	// public String getName() {
-	// return activity.getName();
-	// }
+	@XmlElement
+	public String getName() {
+		return activity.getName();
+	}
 
 	// @XmlElement
 	// public String getRef() {
