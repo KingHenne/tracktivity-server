@@ -1,6 +1,7 @@
 package de.hliebau.tracktivity.api;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import de.hliebau.tracktivity.api.domain.ThinActivities;
 import de.hliebau.tracktivity.api.domain.ThinActivity;
 import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.User;
@@ -55,6 +57,12 @@ public class ActivityRestService {
 			activityService.deleteActivity(activity);
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	public List<ThinActivity> getActivities() {
+		return new ThinActivities(activityService.getRecentActivities(50)).getActivities();
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
