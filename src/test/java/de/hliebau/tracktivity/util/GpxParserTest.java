@@ -1,9 +1,9 @@
 package de.hliebau.tracktivity.util;
 
+import static org.junit.Assert.*;
+
 import java.io.InputStream;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +31,12 @@ public class GpxParserTest {
 		InputStream gpxFile = this.getClass().getResourceAsStream("/track.gpx");
 		Activity activity = gpxParser.createActivity(gpxFile);
 		Track track = activity.getTrack();
-		Assert.assertNotNull(activity);
-		Assert.assertNotNull(track);
-		Assert.assertEquals(1181, track.getPointsCount());
-		Assert.assertEquals(35541.0, Math.floor(track.getLengthInMeters()));
-		Assert.assertEquals(1, track.getDuration(false).getHours());
-		Assert.assertEquals("Bergtour 2", activity.getName());
+		assertNotNull(activity);
+		assertNotNull(track);
+		assertEquals(1181, track.getPointsCount());
+		assertEquals(35541.0, Math.floor(track.getLengthInMeters()), 0);
+		assertEquals(1, track.getDuration(false).getHours());
+		assertEquals("Bergtour 2", activity.getName());
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class GpxParserTest {
 		segment.addPoint(new TrackPoint(10, 20, 30, new Date(5000)));
 		Activity activity = new Activity(new Track(segment));
 		String exportedActivity = gpxParser.exportActivity(activity);
-		Assert.assertEquals("<?xml version=\"1.0\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" "
+		assertEquals("<?xml version=\"1.0\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\" "
 				+ "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 "
 				+ "http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk><name></name><trkseg>"

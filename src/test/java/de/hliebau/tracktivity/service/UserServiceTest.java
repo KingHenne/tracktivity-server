@@ -1,9 +1,9 @@
 package de.hliebau.tracktivity.service;
 
+import static org.junit.Assert.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,39 +52,39 @@ public class UserServiceTest {
 		long countBefore = userService.getUserCount();
 		userService.createUser(newUser);
 		long countAfter = userService.getUserCount();
-		Assert.assertEquals("The user count has not been increased by 1.", countBefore + 1, countAfter);
+		assertEquals("The user count has not been increased by 1.", countBefore + 1, countAfter);
 
 		countBefore = countAfter;
 		userService.deleteUser(newUser);
 		countAfter = userService.getUserCount();
-		Assert.assertEquals("The user count has not been decreased by 1.", countBefore - 1, countAfter);
+		assertEquals("The user count has not been decreased by 1.", countBefore - 1, countAfter);
 	}
 
 	@Test
 	public void testAddUserWithActivities() {
 		User testUser = addTestUserWithActivity();
-		Assert.assertNotNull(testUser);
-		Assert.assertEquals(testUser.getActivities().size(), 1);
+		assertNotNull(testUser);
+		assertEquals(testUser.getActivities().size(), 1);
 		Activity userActivity = testUser.getActivities().get(0);
-		Assert.assertNotNull("The user activity does not exist.", activityDao.findById(userActivity.getId()));
+		assertNotNull("The user activity does not exist.", activityDao.findById(userActivity.getId()));
 	}
 
 	@Test
 	public void testDeleteUserWithActivities() {
 		User testUser = addTestUserWithActivity();
-		Assert.assertTrue(testUser.getActivities().size() > 0);
+		assertTrue(testUser.getActivities().size() > 0);
 		Activity userActivity = testUser.getActivities().get(0);
 		userService.deleteUser(testUser);
-		Assert.assertNull("The user activity still exists.", activityDao.findById(userActivity.getId()));
+		assertNull("The user activity still exists.", activityDao.findById(userActivity.getId()));
 	}
 
 	@Test
 	public void testFindNonexistentUser() {
 		User user = userService.retrieveUser("nonexistenTestUser", false);
-		Assert.assertNull("The return value was not null.", user);
+		assertNull("The return value was not null.", user);
 
 		user = userService.retrieveUser(-1);
-		Assert.assertNull("The return value was not null.", user);
+		assertNull("The return value was not null.", user);
 	}
 
 	@Test
@@ -92,17 +92,17 @@ public class UserServiceTest {
 		User testUser = addTestUserWithActivity();
 		Activity userActivity = testUser.getActivities().get(0);
 		testUser.deleteActivity(userActivity);
-		Assert.assertFalse(testUser.getActivities().contains(userActivity));
+		assertFalse(testUser.getActivities().contains(userActivity));
 		userService.updateUser(testUser);
 		entityManager.flush();
-		Assert.assertNull("The user activity still exists.", activityDao.findById(userActivity.getId()));
+		assertNull("The user activity still exists.", activityDao.findById(userActivity.getId()));
 	}
 
 	@Test
 	public void testUsernameCaseInsensitivity() {
 		User testUser = addTestUserWithActivity();
 		User testUserUpper = userService.retrieveUser(testUser.getUsername().toUpperCase(), false);
-		Assert.assertNotNull("Could not find the test user with uppercase letters.", testUserUpper);
+		assertNotNull("Could not find the test user with uppercase letters.", testUserUpper);
 
 		long countBefore = userService.getUserCount();
 		User newUser = new User(testUser.getUsername().toUpperCase());
@@ -112,7 +112,7 @@ public class UserServiceTest {
 			// this exception is expected
 		} finally {
 			long countAfter = userService.getUserCount();
-			Assert.assertEquals("A user was added that should not have been added.", countAfter, countBefore);
+			assertEquals("A user was added that should not have been added.", countAfter, countBefore);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package de.hliebau.tracktivity.util;
 
-import java.io.InputStream;
+import static org.junit.Assert.*;
 
-import junit.framework.Assert;
+import java.io.InputStream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,12 +28,12 @@ public class TcxParserTest {
 		InputStream tcxFile = this.getClass().getResourceAsStream("/track.tcx");
 		Activity activity = tcxParser.createActivity(tcxFile);
 		Track track = activity.getTrack();
-		Assert.assertNotNull(activity);
-		Assert.assertNotNull(track);
-		Assert.assertEquals(8, track.getPointsCount());
-		Assert.assertEquals(110.0, Math.floor(track.getLengthInMeters()));
-		Assert.assertEquals(15, track.getDuration(true).getSeconds());
-		Assert.assertNull(activity.getName());
+		assertNotNull(activity);
+		assertNotNull(track);
+		assertEquals(8, track.getPointsCount());
+		assertEquals(110.0, Math.floor(track.getLengthInMeters()), 0);
+		assertEquals(15, track.getDuration(true).getSeconds());
+		assertNull(activity.getName());
 	}
 
 }

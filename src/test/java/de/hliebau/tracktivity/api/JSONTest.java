@@ -1,8 +1,8 @@
 package de.hliebau.tracktivity.api;
 
-import java.io.InputStream;
+import static org.junit.Assert.*;
 
-import junit.framework.Assert;
+import java.io.InputStream;
 
 import org.junit.Test;
 
@@ -26,11 +26,11 @@ public class JSONTest {
 
 		Activity activity = m.readValue(jsonFile, Activity.class);
 
-		Assert.assertEquals("Test Activity", activity.getName());
-		Assert.assertEquals(ActivityType.CYCLING, activity.getType());
-		Assert.assertEquals(1, activity.getTrack().getSegments().size());
-		Assert.assertEquals(2, activity.getTrack().getPointsCount());
-		Assert.assertEquals(12, activity.getTrack().getDuration(true).getSeconds());
+		assertEquals("Test Activity", activity.getName());
+		assertEquals(ActivityType.CYCLING, activity.getType());
+		assertEquals(1, activity.getTrack().getSegments().size());
+		assertEquals(2, activity.getTrack().getPointsCount());
+		assertEquals(12, activity.getTrack().getDuration(true).getSeconds());
 	}
 
 }

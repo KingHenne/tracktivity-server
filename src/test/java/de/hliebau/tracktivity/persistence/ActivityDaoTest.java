@@ -1,6 +1,6 @@
 package de.hliebau.tracktivity.persistence;
 
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +38,11 @@ public class ActivityDaoTest {
 		Activity newActivity = new Activity();
 		newActivity.setUser(testUser);
 		activityDao.save(newActivity);
-		Assert.assertEquals("The activity count has not been increased by 1.", countBefore + 1, activityDao.getCount());
+		assertEquals("The activity count has not been increased by 1.", countBefore + 1, activityDao.getCount());
 
 		// clean up
 		activityDao.delete(newActivity);
-		Assert.assertEquals("The activity count has not been decreased by 1.", countBefore, activityDao.getCount());
+		assertEquals("The activity count has not been decreased by 1.", countBefore, activityDao.getCount());
 	}
 
 	@Test
@@ -52,10 +52,10 @@ public class ActivityDaoTest {
 		Activity newActivity = new Activity(ActivityType.CYCLING);
 		newActivity.setUser(testUser);
 		activityDao.save(newActivity);
-		Assert.assertEquals("The activity count has not been increased by 1.", countBefore + 1, activityDao.getCount());
+		assertEquals("The activity count has not been increased by 1.", countBefore + 1, activityDao.getCount());
 
 		// clean up
 		activityDao.delete(newActivity);
-		Assert.assertEquals("The activity count has not been decreased by 1.", countBefore, activityDao.getCount());
+		assertEquals("The activity count has not been decreased by 1.", countBefore, activityDao.getCount());
 	}
 }
