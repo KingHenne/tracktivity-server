@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -61,8 +62,8 @@ public class ActivityRestService {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<ThinActivity> getActivities() {
-		return new ThinActivities(activityService.getRecentActivities(50)).getActivities();
+	public List<ThinActivity> getActivities(@RequestParam(defaultValue = "50") int count) {
+		return new ThinActivities(activityService.getRecentActivities(count)).getActivities();
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
