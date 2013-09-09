@@ -1,6 +1,7 @@
 package de.hliebau.tracktivity.api;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import de.hliebau.tracktivity.api.domain.ThinActivities;
 import de.hliebau.tracktivity.api.domain.ThinActivity;
 import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.User;
@@ -63,7 +63,12 @@ public class ActivityRestService {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public List<ThinActivity> getActivities(@RequestParam(defaultValue = "50") int count) {
-		return new ThinActivities(activityService.getRecentActivities(count)).getActivities();
+		List<Activity> recentActivities = activityService.getRecentActivities(count);
+		List<ThinActivity> thinActivities = new ArrayList<ThinActivity>();
+		for (Activity activity : recentActivities) {
+			thinActivities.add(new ThinActivity(activity));
+		}
+		return thinActivities;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
