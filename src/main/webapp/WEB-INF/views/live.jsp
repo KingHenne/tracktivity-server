@@ -8,8 +8,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Tracktivity - Live Tracking</title>
-<link rel="stylesheet" href="/css/normalize.css" type="text/css" />
-<link rel="stylesheet" href="/css/style.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/normalize.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/style.css" type="text/css" />
 <style type="text/css">
 	input#chat {
 		width: 410px

@@ -12,9 +12,9 @@
 <!-- Mobile viewport optimized: j.mp/bplateviewport -->
 <meta name="viewport" content="width=device-width, minimum-scale=1.0 maximum-scale=1.0 initial-scale=1.0" />
 
-<link rel="stylesheet" href="/css/normalize.css" type="text/css" />
-<link rel="stylesheet" href="/css/style.css" type="text/css" />
-<link rel="stylesheet" href="/css/leaflet.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/normalize.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/style.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/leaflet.css" type="text/css" />
 </head>
 <body>
 
@@ -42,7 +42,7 @@
 	</c:otherwise>
 </c:choose>
 
-<script src="/js/leaflet.js"></script>
+<script src="/app/js/leaflet.js"></script>
 <script type="text/javascript">
 	var multiPolyline = ${activity.track.sparseMultiPolyline};
 	var latLonBounds = ${activity.track.latLngBounds};

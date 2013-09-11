@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Tracktivity - Register</title>
-<link rel="stylesheet" href="/css/normalize.css" type="text/css" />
-<link rel="stylesheet" href="/css/style.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/normalize.css" type="text/css" />
+<link rel="stylesheet" href="/app/css/style.css" type="text/css" />
 </head>
 <body>
 
