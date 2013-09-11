@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import de.hliebau.tracktivity.api.JsonDateSerializer;
+import de.hliebau.tracktivity.util.JsonDateSerializer;
 
 @Entity
 @XmlRootElement

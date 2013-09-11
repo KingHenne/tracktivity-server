@@ -76,7 +76,6 @@ public class ActivityServiceTest {
 
 		long countBefore = activityService.getTrackCount();
 		activityService.createTrack(track);
-		track.getLatLngBounds();
 		// track = trackService.retrieveTrack(track.getId());
 		// ^ why do I need to do this?
 		assertNotNull(track.getLengthInMeters());

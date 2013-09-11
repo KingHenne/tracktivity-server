@@ -1,4 +1,4 @@
-package de.hliebau.tracktivity.api;
+package de.hliebau.tracktivity.util;
 
 import java.io.IOException;
 import java.util.Calendar;

@@ -30,35 +30,6 @@ public class GeometryUtils {
 		return INSTANCE;
 	}
 
-	public static String toLatLngArrayString(Coordinate[] coords) {
-		if (coords.length == 1) {
-			return toLatLngString(coords[0]);
-		}
-		StringBuilder sb = new StringBuilder(coords.length * 21);
-		sb.append('[');
-		for (Coordinate coord : coords) {
-			sb.append(toLatLngString(coord)).append(',');
-		}
-		sb.deleteCharAt(sb.length() - 1); // remove last comma
-		return sb.append(']').toString();
-	}
-
-	public static String toLatLngString(Coordinate coord) {
-		double lat = coord.y;
-		double lng = coord.x;
-		return toLatLngString(lat, lng);
-	}
-
-	public static String toLatLngString(double lat, double lng) {
-		StringBuilder sb = new StringBuilder(21);
-		sb.append('[').append(lat).append(',').append(lng).append(']');
-		return sb.toString();
-	}
-
-	public static String toLatLngString(TrackPoint point) {
-		return toLatLngString(point.getLatitude(), point.getLongitude());
-	}
-
 	private GeodeticCalculator geocalc;
 
 	private final GeometryFactory geometryFactory;

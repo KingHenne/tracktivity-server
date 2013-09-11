@@ -44,8 +44,8 @@
 
 <script src="/app/js/leaflet.js"></script>
 <script type="text/javascript">
-	var multiPolyline = ${activity.track.sparseMultiPolyline};
-	var latLonBounds = ${activity.track.latLngBounds};
+	var multiPolyline = ${sparseMultiPolyline};
+	var latLonBounds = ${latLngBounds};
 	
 	var map = L.map('map');
 	map.fitBounds(latLonBounds);

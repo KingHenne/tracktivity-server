@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.User;
@@ -40,6 +43,11 @@ public class ActivityController {
 			model.addAttribute(activity);
 			model.addAttribute("durationNetto", activity.getTrack().getDuration(false));
 			model.addAttribute("durationBrutto", activity.getTrack().getDuration(true));
+			// create JSON data to be used in JS
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode trackTree = mapper.valueToTree(activity.getTrack());
+			model.addAttribute("sparseMultiPolyline", trackTree.get("sparseMultiPolyline").toString());
+			model.addAttribute("latLngBounds", trackTree.get("latLngBounds").toString());
 		}
 		return "activity";
 	}

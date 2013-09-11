@@ -82,17 +82,6 @@ public class TrackSegment extends AbstractEntity {
 	}
 
 	@Transient
-	public String getSparsePolyline() {
-		StringBuilder sb = new StringBuilder(18 * points.size() + 2);
-		sb.append('[');
-		for (TrackPoint p : points) {
-			sb.append(GeometryUtils.toLatLngString(p)).append(',');
-		}
-		sb.deleteCharAt(sb.length() - 1); // remove last comma
-		return sb.append(']').toString();
-	}
-
-	@Transient
 	public TrackPoint getStartingPoint() {
 		return points.get(0);
 	}

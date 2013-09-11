@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
 
-import de.hliebau.tracktivity.api.JsonDateSerializer;
 import de.hliebau.tracktivity.util.GeometryUtils;
+import de.hliebau.tracktivity.util.JsonDateSerializer;
 
 @Entity
 @XmlAccessorType(XmlAccessType.NONE)
