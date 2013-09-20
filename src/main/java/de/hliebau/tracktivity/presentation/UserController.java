@@ -1,5 +1,6 @@
 package de.hliebau.tracktivity.presentation;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerUser(@Valid User user, BindingResult bindingResult) {
+	public String registerUser(@Valid User user, BindingResult bindingResult, HttpServletRequest request) {
 		if (!bindingResult.hasErrors()) {
 			try {
 				String plainPassword = user.getPassword();
@@ -61,7 +62,7 @@ public class UserController {
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
-		return "redirect:users/" + user.getUsername();
+		return "redirect:" + request.getServletPath() + "/users/" + user.getUsername();
 	}
 
 }
