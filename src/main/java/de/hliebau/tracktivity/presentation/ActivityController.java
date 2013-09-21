@@ -19,12 +19,15 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.hliebau.tracktivity.domain.Activity;
 import de.hliebau.tracktivity.domain.ActivityType;
+import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.User;
 import de.hliebau.tracktivity.service.ActivityService;
 import de.hliebau.tracktivity.service.UserService;
+import de.hliebau.tracktivity.util.JsonTrackSerializer;
 
 @Controller
 @RequestMapping("/activities")
@@ -36,6 +39,14 @@ public class ActivityController {
 	@Autowired
 	private UserService userService;
 
+	private ObjectMapper createObjectMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		SimpleModule module = new SimpleModule();
+		module.addSerializer(new JsonTrackSerializer(Track.class));
+		mapper.registerModule(module);
+		return mapper;
+	}
+
 	@RequestMapping(value = "/{activityId}", method = RequestMethod.GET)
 	public String displayActivity(@PathVariable Long activityId, Model model) {
 		Activity activity = activityService.retrieveActivityWithTrack(activityId);
@@ -44,9 +55,9 @@ public class ActivityController {
 			model.addAttribute("durationNetto", activity.getTrack().getDuration(false));
 			model.addAttribute("durationBrutto", activity.getTrack().getDuration(true));
 			// create JSON data to be used in JS
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = createObjectMapper();
 			JsonNode trackTree = mapper.valueToTree(activity.getTrack());
-			model.addAttribute("sparseMultiPolyline", trackTree.get("sparseMultiPolyline").toString());
+			model.addAttribute("multiPolyline", trackTree.get("multiPolyline").toString());
 			model.addAttribute("latLngBounds", trackTree.get("latLngBounds").toString());
 		}
 		return "activity";

@@ -4,15 +4,19 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import de.hliebau.tracktivity.domain.Track;
 import de.hliebau.tracktivity.domain.TrackPoint;
 import de.hliebau.tracktivity.domain.TrackSegment;
 
-public class JsonTrackSerializer extends JsonSerializer<Track> {
+public class JsonTrackSerializer extends StdSerializer<Track> {
+
+	public JsonTrackSerializer(Class<Track> t) {
+		super(t);
+	}
 
 	@Override
 	public void serialize(Track track, JsonGenerator jgen, SerializerProvider provider) throws IOException,
@@ -20,7 +24,7 @@ public class JsonTrackSerializer extends JsonSerializer<Track> {
 		jgen.writeStartObject();
 
 		// write the MultiPolyline
-		jgen.writeArrayFieldStart("sparseMultiPolyline");
+		jgen.writeArrayFieldStart("multiPolyline");
 		for (TrackSegment s : track.getSegments()) {
 			jgen.writeStartArray();
 			for (TrackPoint p : s.getPoints()) {

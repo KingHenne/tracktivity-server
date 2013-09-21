@@ -44,7 +44,8 @@
 
 <script src="/app/js/leaflet.js"></script>
 <script type="text/javascript">
-	var multiPolyline = ${sparseMultiPolyline};
+(function() {
+	var multiPolyline = ${multiPolyline};
 	var latLonBounds = ${latLngBounds};
 	
 	var map = L.map('map');
@@ -58,7 +59,8 @@
 	    detectRetina: true
 	}).addTo(map);
 	
-	var polyline = L.multiPolyline(multiPolyline, {color: '#0073E5', opacity: 0.8}).addTo(map);
+	L.multiPolyline(multiPolyline, {color: '#0073E5', opacity: 0.8}).addTo(map);
+})();
 </script>
 
 </body>
