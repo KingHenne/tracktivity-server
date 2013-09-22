@@ -75,7 +75,7 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 			this.recordingActivity.setRecording(true);
 			this.recordingActivity.setUser(user);
 			this.recordingActivity.setType(type);
-			activityService.createActivity(this.recordingActivity);
+			// activityService.createActivity(this.recordingActivity);
 			return this.recordingActivity;
 		}
 
@@ -106,6 +106,7 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 
 			logger.debug("received message from {}: {}", this.user.getUsername(), textMessage.toString());
 			WebSocketMessage message = this.mapper.readValue(textMessage.toString(), WebSocketMessage.class);
+			message.setUsername(this.user.getUsername());
 
 			switch (message.getEvent()) {
 			case STARTED:
@@ -123,20 +124,21 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 				}
 				// finally add the recorded point and persist the update
 				this.recordingActivity.addPoint(newPoint);
-				activityService.updateActivity(this.recordingActivity);
+				// activityService.updateActivity(this.recordingActivity);
 				break;
 			case PAUSED:
 				this.recordingPaused = true;
 				break;
 			case FINISHED:
 				this.recordingActivity.setRecording(false);
-				activityService.updateActivity(this.recordingActivity);
+				// activityService.updateActivity(this.recordingActivity);
 				this.recordingActivity = null;
 				break;
 			}
 
-			// broadcast the incoming message to all listening connections
-			broadcast(textMessage.toString(), false);
+			// broadcast the (modified) incoming message to all listening
+			// connections
+			broadcast(this.mapper.writeValueAsString(message), false);
 		}
 
 	}

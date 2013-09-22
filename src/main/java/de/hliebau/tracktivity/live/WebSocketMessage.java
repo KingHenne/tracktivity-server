@@ -2,9 +2,15 @@ package de.hliebau.tracktivity.live;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import de.hliebau.tracktivity.domain.ActivityType;
 import de.hliebau.tracktivity.domain.TrackPoint;
+import de.hliebau.tracktivity.util.JsonDateSerializer;
 
+@JsonInclude(Include.NON_NULL)
 public class WebSocketMessage {
 
 	private ActivityType activityType;
@@ -14,6 +20,8 @@ public class WebSocketMessage {
 	private TrackPoint point;
 
 	private Date time;
+
+	private String username;
 
 	public ActivityType getActivityType() {
 		return activityType;
@@ -27,8 +35,13 @@ public class WebSocketMessage {
 		return point;
 	}
 
+	@JsonSerialize(using = JsonDateSerializer.class)
 	public Date getTime() {
 		return time;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	public void setActivityType(ActivityType activityType) {
@@ -45,6 +58,10 @@ public class WebSocketMessage {
 
 	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }
