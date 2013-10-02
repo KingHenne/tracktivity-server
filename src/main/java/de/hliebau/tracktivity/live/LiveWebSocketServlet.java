@@ -111,7 +111,7 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 			switch (message.getEvent()) {
 			case STARTED:
 				// create a new activity and return the ID to the sender
-				this.createLiveActivity(message.getActivityType()).getId();
+				this.createLiveActivity(message.getActivityType());
 				// long activityId =
 				// this.createLiveActivity(message.getActivityType()).getId();
 				// String response = String.format("{ id: %d }", activityId);
@@ -119,6 +119,9 @@ public class LiveWebSocketServlet extends WebSocketServlet {
 				break;
 			case RECORDING:
 				TrackPoint newPoint = message.getPoint();
+				if (this.recordingActivity == null) {
+					this.createLiveActivity(message.getActivityType());
+				}
 				if (this.recordingPaused) {
 					// create a new segment after a pause
 					this.recordingPaused = false;
